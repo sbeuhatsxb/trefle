@@ -34,3 +34,7 @@ services:
     Elasticsearch\Client:
         factory:   ['@Elasticsearch\ClientBuilder', fromConfig]
         arguments: ['%es_config%']
+
+    Elastica\Client:
+        $config:
+            host: 127.0.0.1

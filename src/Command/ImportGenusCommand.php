@@ -352,10 +352,13 @@ class ImportGenusCommand extends Command
 			$this->entityManager->persist($genus);
 			$this->entityManager->persist($family);
 			$this->entityManager->persist($rank);
-			if ($i % 50 === 0) {
+			if ($i % 250 === 0) {
 				echo(".");
 				$this->entityManager->flush();
 			}
+            if ($i % 10000 === 0) {
+                echo($i." plants loaded !");
+            }
 			$i++;
 		}
 

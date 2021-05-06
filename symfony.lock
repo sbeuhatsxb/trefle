@@ -120,6 +120,9 @@
     "nikic/php-parser": {
         "version": "v4.10.4"
     },
+    "nyholm/dsn": {
+        "version": "2.0.0"
+    },
     "php": {
         "version": "7.4"
     },
@@ -146,6 +149,9 @@
     },
     "react/promise": {
         "version": "v2.8.0"
+    },
+    "ruflin/elastica": {
+        "version": "7.1.1"
     },
     "symfony/asset": {
         "version": "v5.2.3"

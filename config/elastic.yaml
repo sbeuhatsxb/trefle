@@ -1,0 +1,22 @@
+settings:
+  index:
+    # single node, no sharding
+    number_of_shards: 1
+    number_of_replicas: 0
+mappings:
+  dynamic: false # disable dynamic mapping
+  properties:
+    scientific_name:
+      type: text
+    common_name:
+      type: text
+    family_common_name:
+      type: text
+    synonyms:
+      type: text
+    common_names:
+      type: text
+    edible:
+      type: boolean
+    vegetable:
+      type: boolean

@@ -10,6 +10,9 @@ use App\Entity\GrowthMonths;
 use App\Entity\Plant;
 use App\Entity\Rank;
 use App\Entity\Url;
+use App\Repository\FamilyRepository;
+use App\Repository\GenusRepository;
+use App\Repository\RankRepository;
 use League\Csv\Reader;
 use League\Csv\Statement;
 use Symfony\Component\Console\Command\Command;
@@ -42,6 +45,11 @@ class ImportGenusCommand extends Command
 			->addOption('option1', null, InputOption::VALUE_NONE, 'Option description');
 	}
 
+	/**
+	 * @throws \League\Csv\UnableToProcessCsv
+	 * @throws \League\Csv\InvalidArgument
+	 * @throws \League\Csv\Exception
+	 */
 	protected function execute(InputInterface $input, OutputInterface $output): int
 	{
 		$io = new SymfonyStyle($input, $output);
@@ -54,6 +62,14 @@ class ImportGenusCommand extends Command
 		if ($input->getOption('option1')) {
 			// ...
 		}
+		/**
+		 * @var Reader $reader
+		 */
+		$reader = Reader::createFromPath('src/Data/plants.csv', 'r');
+		$reader->setHeaderOffset(0);
+		$reader->setDelimiter("\t");
+		$records = Statement::create()->process($reader);
+		$records->getHeader();
 
 		//Feed Urls
 		$url = new Url();
@@ -108,12 +124,6 @@ class ImportGenusCommand extends Command
 			$this->entityManager->persist($growthMonth);
 		}
 		$this->entityManager->flush();
-
-		$reader = Reader::createFromPath('src/Data/plants.csv', 'r');
-		$reader->setHeaderOffset(0);
-		$reader->setDelimiter("\t");
-		$records = Statement::create()->process($reader);
-		$records->getHeader();
 
 		//Rank
 		$ranks = [];
@@ -178,8 +188,11 @@ class ImportGenusCommand extends Command
 		$bloomMonthRepo = $this->entityManager->getRepository(BloomMonths::class);
 		$fruitMonthRepo = $this->entityManager->getRepository(FruitMonths::class);
 		$growthMonthRepo = $this->entityManager->getRepository(GrowthMonths::class);
+		/** @var RankRepository $rankRepo */
 		$rankRepo = $this->entityManager->getRepository(Rank::class);
+		/** @var FamilyRepository $familyRepo */
 		$familyRepo = $this->entityManager->getRepository(Family::class);
+		/** @var GenusRepository $genusRepo */
 		$genusRepo = $this->entityManager->getRepository(Genus::class);
 
 		$records = $reader->getRecords(['id', 'scientific_name', 'rank', 'genus', 'family', 'year', 'author', 'bibliography', 'common_name', 'family_common_name', 'image_url', 'flower_color', 'flower_conspicuous', 'foliage_color', 'foliage_texture', 'fruit_color', 'fruit_conspicuous', 'fruit_months', 'bloom_months', 'ground_humidity', 'growth_form', 'growth_habit', 'growth_months', 'growth_rate', 'edible_part', 'vegetable', 'edible', 'light', 'soil_nutriments', 'soil_salinity', 'anaerobic_tolerance', 'atmospheric_humidity', 'average_height_cm', 'maximum_height_cm', 'minimum_root_depth_cm', 'ph_maximum', 'ph_minimum', 'planting_days_to_harvest', 'planting_description', 'planting_sowing_description', 'planting_row_spacing_cm', 'planting_spread_cm', 'synonyms', 'distributions', 'common_names', 'url_usda', 'url_tropicos', 'url_tela_botanica', 'url_powo', 'url_plantnet', 'url_gbif', 'url_openfarm', 'url_catminat', 'url_wikipedia_en']);
@@ -187,12 +200,18 @@ class ImportGenusCommand extends Command
 		foreach ($records as $offset => $record) {
 			$plant = new Plant();
 			$plant->setScientificName($record['scientific_name']);
+			/** @var Rank $rank */
 			$rank = $rankRepo->findOneBy(['name' => $record['rank']]);
+			/** @var Family $family */
 			$family = $familyRepo->findOneBy(['name' => $record['family']]);
+			/** @var Genus $genus */
 			$genus = $genusRepo->findOneBy(['name' => $record['genus']]);
 			$plant->setRank($rank);
+			$rank->addPlant($plant);
 			$plant->setGenus($genus);
+			$family->addPlant($plant);
 			$plant->setFamily($family);
+			$genus->addPlant($plant);
 			if ($record['bibliography']) {
 				$plant->setBibliography($record['bibliography']);
 			}
@@ -330,6 +349,9 @@ class ImportGenusCommand extends Command
 			}
 
 			$this->entityManager->persist($plant);
+			$this->entityManager->persist($genus);
+			$this->entityManager->persist($family);
+			$this->entityManager->persist($rank);
 			if ($i % 50 === 0) {
 				echo(".");
 				$this->entityManager->flush();

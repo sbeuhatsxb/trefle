@@ -37,4 +37,4 @@ services:
 
     Elastica\Client:
         $config:
-            host: 127.0.0.1
+            host: docker_es_1

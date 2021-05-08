@@ -8,7 +8,6 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use ApiPlatform\Core\Annotation\ApiResource;
 use Symfony\Component\Serializer\Annotation\Groups;
-use App\Controller\ShowPlantHandler;
 
 /**
  * @ORM\Entity(repositoryClass=PlantRepository::class)
@@ -23,12 +22,6 @@ use App\Controller\ShowPlantHandler;
         'get' => [
             'normalization_context' => ['groups' => ['read:Plant:item', 'read:Plant'],
             ]
-        ],
-        'get_plant' => [
-            'method' => 'GET',
-            'path' => '/plants/{id}',
-            'controller' => ShowPlantHandler::class,
-            'normalization_context' => ['groups' => ['read:Plant:item', 'read:Plant']],
         ]
     ]
 )]
@@ -1122,5 +1115,4 @@ class Plant
 
 		return $this;
 	}
-
 }

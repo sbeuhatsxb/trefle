@@ -113,6 +113,9 @@
     "friendsofphp/proxy-manager-lts": {
         "version": "v1.0.3"
     },
+    "jolicode/elastically": {
+        "version": "v1.2.0"
+    },
     "laminas/laminas-code": {
         "version": "4.0.0"
     },

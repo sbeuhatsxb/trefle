@@ -3,6 +3,7 @@ settings:
     # single node, no sharding
     number_of_shards: 1
     number_of_replicas: 0
+    refresh_interval: 60s
 mappings:
   dynamic: false # disable dynamic mapping
   properties:
@@ -10,8 +11,10 @@ mappings:
       type: text
     common_name:
       type: text
+      analyzer: english
     family_common_name:
       type: text
+      analyzer: english
     synonyms:
       type: text
     common_names:

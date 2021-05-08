@@ -3,6 +3,7 @@ namespace App\Elasticsearch;
 
 use App\Entity\Plant;
 use App\Repository\PlantRepository;
+use Doctrine\ORM\EntityManagerInterface;
 use Elastica\Client;
 use Elastica\Document;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
@@ -12,12 +13,14 @@ class PlantIndexer
     private $client;
     private $plantRepository;
     private $router;
+    private $entityManager;
 
-    public function __construct(Client $client, PlantRepository $plantRepository, UrlGeneratorInterface $router)
+    public function __construct(Client $client, PlantRepository $plantRepository, UrlGeneratorInterface $router, EntityManagerInterface $entityManager)
     {
         $this->client = $client;
         $this->plantRepository = $plantRepository;
         $this->router = $router;
+        $this->entityManager = $entityManager;
     }
 
     public function buildDocument(Plant $plant)
@@ -43,12 +46,16 @@ class PlantIndexer
 
     public function indexAllDocuments($indexName)
     {
-        $allPosts = $this->plantRepository->findAll();
+        //docker exec -it symfony php -d memory_limit=4096M bin/console elastic:reindex --no-debug --env=prod
+        $this->entityManager->getConnection()->getConfiguration()->setSQLLogger(null);
+        $allPlant = $this->plantRepository->findAll();
+
         $index = $this->client->getIndex($indexName);
 
         $documents = [];
-        foreach ($allPosts as $post) {
+        foreach ($allPlant as $post) {
             $documents[] = $this->buildDocument($post);
+            $this->entityManager->clear();
         }
 
         $index->addDocuments($documents);

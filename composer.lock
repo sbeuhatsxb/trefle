@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "9065c5bb0dc6f237a1f11f49c6eb99c9",
+    "content-hash": "55bacf592c2e6031b64d83f36c38c23d",
     "packages": [
         {
             "name": "api-platform/core",
@@ -1897,6 +1897,70 @@
                 }
             ],
             "time": "2021-01-14T21:52:44+00:00"
+        },
+        {
+            "name": "jolicode/elastically",
+            "version": "v1.2.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/jolicode/elastically.git",
+                "reference": "45abe7df07df3438a9bb614dd03ac02a66512d0b"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/jolicode/elastically/zipball/45abe7df07df3438a9bb614dd03ac02a66512d0b",
+                "reference": "45abe7df07df3438a9bb614dd03ac02a66512d0b",
+                "shasum": ""
+            },
+            "require": {
+                "ext-json": "*",
+                "php": "^7.2 || ^8.0",
+                "phpdocumentor/reflection-docblock": "^3.0|^4.0|^5.0",
+                "ruflin/elastica": "^7.0",
+                "symfony/property-access": "^3.4|^4.0|^5.0",
+                "symfony/property-info": "^3.4|^4.0|^5.0",
+                "symfony/serializer": "^3.4|^4.0|^5.0",
+                "symfony/yaml": "^3.4|^4.0|^5.0"
+            },
+            "require-dev": {
+                "friendsofphp/php-cs-fixer": "^2.14",
+                "jane-php/json-schema": "^6.0",
+                "jane-php/json-schema-runtime": "^6.0",
+                "symfony/browser-kit": "^4.3|^5.0",
+                "symfony/framework-bundle": "^4.3|^5.0",
+                "symfony/http-client": "^4.3|^5.0",
+                "symfony/http-foundation": "^4.3|^5.0",
+                "symfony/messenger": "^4.4|^5.0",
+                "symfony/phpunit-bridge": "^5.0"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "JoliCode\\Elastically\\": "./src"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Damien Alexandre",
+                    "homepage": "https://jolicode.com/"
+                }
+            ],
+            "description": "Opinionated Elastica based framework to bootstrap PHP and Elasticsearch implementations.",
+            "keywords": [
+                "elastica",
+                "elasticsearch",
+                "search",
+                "symfony"
+            ],
+            "support": {
+                "issues": "https://github.com/jolicode/elastically/issues",
+                "source": "https://github.com/jolicode/elastically/tree/v1.2.0"
+            },
+            "time": "2021-02-16T09:05:27+00:00"
         },
         {
             "name": "laminas/laminas-code",

@@ -5,14 +5,16 @@ namespace App\Command;
 use App\Elasticsearch\PlantIndexer;
 use App\Elasticsearch\IndexBuilder;
 use Symfony\Component\Console\Command\Command;
+use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
+use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
 
 class ElasticReindexCommand extends Command
 {
     protected static $defaultName = 'elastic:reindex';
-
+    protected static $defaultDescription = 'Add a short description for your command';
     private $indexBuilder;
     private $plantIndexer;
 
@@ -24,14 +26,16 @@ class ElasticReindexCommand extends Command
         parent::__construct();
     }
 
-    protected function configure()
+    protected function configure(): void
     {
         $this
-            ->setDescription('Rebuild the Index and populate it.')
+            ->setDescription(self::$defaultDescription)
+            ->addArgument('arg1', InputArgument::OPTIONAL, 'Argument description')
+            ->addOption('option1', null, InputOption::VALUE_NONE, 'Option description')
         ;
     }
 
-    protected function execute(InputInterface $input, OutputInterface $output)
+    protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $io = new SymfonyStyle($input, $output);
 
@@ -42,6 +46,7 @@ class ElasticReindexCommand extends Command
         $this->plantIndexer->indexAllDocuments($index->getName());
 
         $io->success('Index populated and ready!');
+
         return Command::SUCCESS;
     }
 }

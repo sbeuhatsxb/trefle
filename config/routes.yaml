@@ -1,3 +1,10 @@
 #index:
 #    path: /
 #    controller: App\Controller\DefaultController::index
+get_plant:
+    path: /trefleApi/V1/plants/{id}
+    methods: ['GET']
+    defaults:
+        _controller: App\Controller\ShowPlantController
+        _api_resource_class: App\Entity\Plant
+        _api_item_operation_name: get_plant

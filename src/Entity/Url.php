@@ -4,10 +4,19 @@ namespace App\Entity;
 
 use App\Repository\UrlRepository;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\Groups;
+use ApiPlatform\Core\Annotation\ApiResource;
 
 /**
  * @ORM\Entity(repositoryClass=UrlRepository::class)
  */
+#[ApiResource(collectionOperations: [
+    'get' => ['method' => 'get'],
+],
+    itemOperations: [
+        'get' => ['method' => 'get'],
+    ],
+)]
 class Url
 {
     /**
@@ -20,11 +29,13 @@ class Url
     /**
      * @ORM\Column(type="string", length=255)
      */
+    #[Groups(['read:Plant'])]
     private $name;
 
     /**
      * @ORM\Column(type="string", length=255)
      */
+    #[Groups(['read:Plant'])]
     private $url;
 
     public function getId(): ?int

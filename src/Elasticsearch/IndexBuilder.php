@@ -17,8 +17,8 @@ class IndexBuilder
 
     public function create()
     {
-        // We name our index "plant"
-        $index = $this->client->getIndex('plant');
+        // We name our index "plantHandler"
+        $index = $this->client->getIndex('plantHandler');
 
         $settings = Yaml::parse(
             file_get_contents(

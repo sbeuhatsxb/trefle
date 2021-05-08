@@ -7,11 +7,31 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use ApiPlatform\Core\Annotation\ApiResource;
+use Symfony\Component\Serializer\Annotation\Groups;
+use App\Controller\ShowPlantHandler;
 
 /**
  * @ORM\Entity(repositoryClass=PlantRepository::class)
- * @ApiResource()
  */
+#[ApiResource(
+    normalizationContext: ['groups' => ['read:collection']],
+    collectionOperations: [
+        'get' => [ 'normalization_context' => ['groups' => ['read:Plant:collection', 'read:Plant']]
+        ]
+    ],
+    itemOperations: [
+        'get' => [
+            'normalization_context' => ['groups' => ['read:Plant:item', 'read:Plant'],
+            ]
+        ],
+        'get_plant' => [
+            'method' => 'GET',
+            'path' => '/plants/{id}',
+            'controller' => ShowPlantHandler::class,
+            'normalization_context' => ['groups' => ['read:Plant:item', 'read:Plant']],
+        ]
+    ]
+)]
 class Plant
 {
 	/**
@@ -19,223 +39,267 @@ class Plant
 	 * @ORM\GeneratedValue
 	 * @ORM\Column(type="integer")
 	 */
+	#[Groups(['read:Plant:item', 'read:Plant:collection'])]
 	private $id;
 
 	/**
 	 * @ORM\Column(type="string", length=255)
 	 */
+    #[Groups(['read:Plant:item', 'read:Plant:collection'])]
 	private $scientificName;
 
 	/**
 	 * @ORM\ManyToOne(targetEntity=Rank::class, inversedBy="plants")
 	 */
-	private $rank;
+    #[Groups(['read:Plant:item'])]
+    private $rank;
 
 	/**
 	 * @ORM\ManyToOne(targetEntity=Genus::class, inversedBy="plants")
 	 */
-	private $genus;
+	#[Groups(['read:Plant:item', 'read:Plant:collection'])]
+    private $genus;
 
 	/**
 	 * @ORM\ManyToOne(targetEntity=Family::class, inversedBy="plants")
 	 */
-	private $family;
+    #[Groups(['read:Plant:item','read:Plant:collection'])]
+    private $family;
 
 	/**
 	 * @ORM\Column(type="text", nullable=true)
 	 */
-	private $bibliography;
+    #[Groups(['read:Plant:item'])]
+    private $bibliography;
 
 	/**
 	 * @ORM\Column(type="string", length=255, nullable=true)
 	 */
-	private $commonName;
+    #[Groups(['read:Plant:item', 'read:Plant:collection'])]
+    private $commonName;
 
 	/**
 	 * @ORM\Column(type="string", length=255, nullable=true)
 	 */
-	private $familyCommonName;
+    #[Groups(['read:Plant:item'])]
+    private $familyCommonName;
 
 	/**
 	 * @ORM\Column(type="text", nullable=true, nullable=true)
 	 */
-	private $imageUrl;
+    #[Groups(['read:Plant:item'])]
+    private $imageUrl;
 
 	/**
 	 * @ORM\Column(type="string", length=255, nullable=true)
 	 */
-	private $flowerColor;
+    #[Groups(['read:Plant:item'])]
+    private $flowerColor;
 
 	/**
 	 * @ORM\Column(type="string", length=255, nullable=true)
 	 */
-	private $flowerConspicuous;
+    #[Groups(['read:Plant:item'])]
+    private $flowerConspicuous;
 
 	/**
 	 * @ORM\Column(type="string", length=255, nullable=true)
 	 */
-	private $foliageColor;
+    #[Groups(['read:Plant:item'])]
+    private $foliageColor;
 
 	/**
 	 * @ORM\Column(type="string", length=255, nullable=true)
 	 */
-	private $foliageTexture;
+    #[Groups(['read:Plant:item'])]
+    private $foliageTexture;
 
 	/**
 	 * @ORM\Column(type="string", length=255, nullable=true)
 	 */
-	private $fruitColor;
+    #[Groups(['read:Plant:item'])]
+    private $fruitColor;
 
 	/**
 	 * @ORM\Column(type="string", length=255, nullable=true)
 	 */
-	private $fruitConspicuous;
+    #[Groups(['read:Plant:item'])]
+    private $fruitConspicuous;
 
 	/**
 	 * @ORM\Column(type="smallint", nullable=true)
 	 */
-	private $groundHumidity;
+    #[Groups(['read:Plant:item'])]
+    private $groundHumidity;
 
 	/**
 	 * @ORM\Column(type="string", length=255, nullable=true)
 	 */
-	private $growthForm;
+    #[Groups(['read:Plant:item'])]
+    private $growthForm;
 
 	/**
 	 * @ORM\Column(type="string", length=255, nullable=true)
 	 */
-	private $growthHabit;
+    #[Groups(['read:Plant:item'])]
+    private $growthHabit;
 
 
 	/**
 	 * @ORM\Column(type="string", length=255, nullable=true)
 	 */
-	private $growthRate;
+    #[Groups(['read:Plant:item'])]
+    private $growthRate;
 
 	/**
 	 * @ORM\Column(type="string", length=255, nullable=true)
 	 */
-	private $ediblePart;
+    #[Groups(['read:Plant:item'])]
+    private $ediblePart;
 
 	/**
 	 * @ORM\Column(type="boolean", nullable=true)
 	 */
-	private $vegetable;
+    #[Groups(['read:Plant:item'])]
+    private $vegetable;
 
 	/**
 	 * @ORM\Column(type="boolean", nullable=true)
 	 */
-	private $edible;
+    #[Groups(['read:Plant:item'])]
+    private $edible;
 
 	/**
 	 * @ORM\Column(type="smallint", nullable=true)
 	 */
-	private $light;
+    #[Groups(['read:Plant:item'])]
+    private $light;
 
 	/**
 	 * @ORM\Column(type="smallint", nullable=true)
 	 */
-	private $soilNutriments;
+    #[Groups(['read:Plant:item'])]
+    private $soilNutriments;
 
 	/**
 	 * @ORM\Column(type="smallint", nullable=true)
 	 */
-	private $soilSalinity;
+    #[Groups(['read:Plant:item'])]
+    private $soilSalinity;
 
 	/**
 	 * @ORM\Column(type="string", length=255, nullable=true)
 	 */
-	private $anaerobicTolerance;
+    #[Groups(['read:Plant:item'])]
+    private $anaerobicTolerance;
 
 	/**
 	 * @ORM\Column(type="smallint", nullable=true)
 	 */
-	private $atmosphericHumidity;
+    #[Groups(['read:Plant:item'])]
+    private $atmosphericHumidity;
 
 	/**
 	 * @ORM\Column(type="integer", nullable=true)
 	 */
-	private $averageHeightCm;
+    #[Groups(['read:Plant:item'])]
+    private $averageHeightCm;
 
 	/**
 	 * @ORM\Column(type="integer", nullable=true)
 	 */
-	private $maximumHeightCm;
+    #[Groups(['read:Plant:item'])]
+    private $maximumHeightCm;
 
 	/**
 	 * @ORM\Column(type="integer", nullable=true)
 	 */
-	private $minimumRootDepthCm;
+    #[Groups(['read:Plant:item'])]
+    private $minimumRootDepthCm;
 
 	/**
 	 * @ORM\Column(type="float", nullable=true)
 	 */
-	private $phMinimum;
+    #[Groups(['read:Plant:item'])]
+    private $phMinimum;
 
 	/**
 	 * @ORM\Column(type="float", nullable=true)
 	 */
-	private $phMaximum;
+    #[Groups(['read:Plant:item'])]
+    private $phMaximum;
 
 	/**
 	 * @ORM\Column(type="text", nullable=true)
 	 */
-	private $plantingSowingDescription;
+    #[Groups(['read:Plant:item'])]
+    private $plantingSowingDescription;
 
 	/**
 	 * @ORM\Column(type="integer", nullable=true)
 	 */
-	private $plantingRowSpacingCm;
+    #[Groups(['read:Plant:item'])]
+    private $plantingRowSpacingCm;
 
 	/**
 	 * @ORM\Column(type="integer", nullable=true)
 	 */
-	private $plantingSpreadCm;
+    #[Groups(['read:Plant:item'])]
+    private $plantingSpreadCm;
 
 	/**
 	 * @ORM\Column(type="text", nullable=true)
 	 */
-	private $synonyms;
+    #[Groups(['read:Plant:item'])]
+    private $synonyms;
 
 	/**
 	 * @ORM\Column(type="text", nullable=true)
 	 */
-	private $commonNames;
+    #[Groups(['read:Plant:item'])]
+    private $commonNames;
 
 	/**
 	 * @ORM\Column(type="string", length=255, nullable=true)
 	 */
-	private $urlPowo;
+    #[Groups(['read:Plant:item'])]
+    private $urlPowo;
 
 	/**
 	 * @ORM\Column(type="string", length=255, nullable=true)
 	 */
-	private $urlPlantnet;
+    #[Groups(['read:Plant:item'])]
+    private $urlPlantnet;
 
 	/**
 	 * @ORM\Column(type="string", length=255, nullable=true)
 	 */
-	private $urlGbif;
+    #[Groups(['read:Plant:item'])]
+    private $urlGbif;
 
 	/**
 	 * @ORM\Column(type="string", length=255, nullable=true)
 	 */
-	private $urlWikipediaEn;
+    #[Groups(['read:Plant:item'])]
+    private $urlWikipediaEn;
 
 	/**
 	 * @ORM\ManyToMany(targetEntity=GrowthMonths::class, inversedBy="plants")
 	 */
-	private $growthMonths;
+    #[Groups(['read:Plant:item'])]
+    private $growthMonths;
 
 	/**
 	 * @ORM\ManyToMany(targetEntity=BloomMonths::class, inversedBy="plants")
 	 */
-	private $bloomMonths;
+    #[Groups(['read:Plant:item'])]
+    private $bloomMonths;
 
 	/**
 	 * @ORM\ManyToMany(targetEntity=FruitMonths::class, inversedBy="plants")
 	 */
-	private $fruitMonths;
+    #[Groups(['read:Plant:item'])]
+    private $fruitMonths;
 
 
 	public function __construct()

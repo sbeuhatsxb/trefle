@@ -34,10 +34,10 @@ class PlantIndexer
                 'edible' => $plant->getEdible(),
 
                 // Not indexed but needed for display
-                //'url' => $this->router->generate('blog_post', ['slug' => $plant->getScientificName()], UrlGeneratorInterface::ABSOLUTE_PATH),
-//                'date' => $plant->getPublishedAt()->format('M d, Y'),
+                //'url' => $this->router->generate('blog_post', ['slug' => $plantHandler->getScientificName()], UrlGeneratorInterface::ABSOLUTE_PATH),
+//                'date' => $plantHandler->getPublishedAt()->format('M d, Y'),
             ],
-            "plant" // Types are deprecated, to be removed in Elastic 7
+            "plantHandler" // Types are deprecated, to be removed in Elastic 7
         );
     }
 

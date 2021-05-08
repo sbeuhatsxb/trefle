@@ -1,7 +1,162 @@
 api_platform:
+    defaults:
+        pagination_enabled: true
     mapping:
-        paths: ['%kernel.project_dir%/src/Entity', 'config/config/apiplatform']
+        paths: ['%kernel.project_dir%/src/Entity', '%kernel.project_dir%/config/apiplatform']
     patch_formats:
         json: ['application/merge-patch+json']
     swagger:
         versions: [3]
+
+    # The title of the API.
+    title: 'API newTrefle.io'
+
+    # The description of the API.
+    description: 'an API referencing more than 450000 plants'
+
+    # The version of the API.
+    version: '1.0.0'
+
+    # Set this to false if you want Webby to disappear.
+    show_webby: false
+
+    eager_loading:
+        # To enable or disable eager loading.
+        enabled: true
+
+        # Fetch only partial data according to serialization groups.
+        # If enabled, Doctrine ORM entities will not work as expected if any of the other fields are used.
+        fetch_partial: false
+
+        # Max number of joined relations before EagerLoading throws a RuntimeException.
+        max_joins: 30
+
+        # Force join on every relation.
+        # If disabled, it will only join relations having the EAGER fetch mode.
+        force_eager: true
+
+    # Enable the Swagger documentation and export.
+    enable_swagger: true
+
+    # Enable Swagger UI.
+    enable_swagger_ui: true
+
+    # Enable ReDoc.
+    enable_re_doc: false
+
+    # Enable the entrypoint.
+    enable_entrypoint: true
+
+    # Enable the docs.
+    enable_docs: true
+
+    # Enable the data collector and the WebProfilerBundle integration.
+    enable_profiler: true
+
+    collection:
+        # The name of the query parameter to filter nullable results (with the ExistsFilter).
+        exists_parameter_name: 'exists'
+
+        # The default order of results.
+        order: 'ASC'
+
+        # The name of the query parameter to order results (with the OrderFilter).
+        order_parameter_name: 'order'
+
+        pagination:
+            # The default name of the parameter handling the page number.
+            page_parameter_name: 'page'
+
+            # The name of the query parameter to enable or disable pagination.
+            enabled_parameter_name: 'pagination'
+
+            # The name of the query parameter to set the number of items per page.
+            items_per_page_parameter_name: 'itemsPerPage'
+
+            # The name of the query parameter to enable or disable the partial pagination.
+            partial_parameter_name: 'partial'
+
+            # To enable or disable pagination for all resource collections by default.
+            # Deprecated since 2.6 and will be removed in 3.0, use defaults.pagination_enabled instead.
+            enabled: true
+
+            # To allow partial pagination for all resource collections.
+            # This improves performances by skipping the `COUNT` query.
+            # Deprecated since 2.6 and will be removed in 3.0, use defaults.pagination_partial instead.
+            partial: false
+
+            # To allow the client to enable or disable the pagination.
+            # Deprecated since 2.6 and will be removed in 3.0, use defaults.pagination_client_enabled instead.
+            client_enabled: false
+
+            # To allow the client to set the number of items per page.
+            # Deprecated since 2.6 and will be removed in 3.0, use defaults.pagination_client_items_per_page instead.
+            client_items_per_page: false
+
+            # To allow the client to enable or disable the partial pagination.
+            # Deprecated since 2.6 and will be removed in 3.0, use defaults.pagination_client_partial instead.
+            client_partial: false
+
+            # The default number of items per page.
+            # Deprecated since 2.6 and will be removed in 3.0, use defaults.pagination_items_per_page instead.
+            items_per_page: 20
+
+            # The maximum number of items per page.
+            # Deprecated since 2.6 and will be removed in 3.0, use defaults.pagination_maximum_items_per_page instead.
+            maximum_items_per_page: 20
+
+    doctrine:
+        # To enable or disable Doctrine ORM support.
+        enabled: true
+
+    http_cache:
+        # To make all responses public by default.
+        public: ~
+
+        invalidation:
+            # To enable the tags-based cache invalidation system.
+            enabled: false
+
+            # URLs of the Varnish servers to purge using cache tags when a resource is updated.
+            varnish_urls: []
+
+            # To pass options to the client charged with the request.
+            request_options: []
+
+        # Automatically generate etags for API responses.
+        # Deprecated since 2.6 and will be removed in 3.0, use defaults.cache_headers.etag instead.
+        etag: true
+
+        # Default value for the response max age.
+        # Deprecated since 2.6 and will be removed in 3.0, use defaults.cache_headers.max_age instead.
+        max_age: 3600
+
+        # Default value for the response shared (proxy) max age.
+        # Deprecated since 2.6 and will be removed in 3.0, use defaults.cache_headers.shared_max_age instead.
+        shared_max_age: 3600
+
+        # Default values of the "Vary" HTTP header.
+        # Deprecated since 2.6 and will be removed in 3.0, use defaults.cache_headers.vary instead.
+        vary: ['Accept']
+
+    elasticsearch:
+        # To enable or disable Elasticsearch support.
+        enabled: false
+
+        # The hosts to the Elasticsearch nodes.
+        hosts: []
+
+        # The mapping between resource classes and indexes.
+        mapping: []
+
+    # The list of exceptions mapped to their HTTP status code.
+    exception_to_status:
+        # With a status code.
+        Symfony\Component\Serializer\Exception\ExceptionInterface: 400
+
+        # Or with a constant defined in the 'Symfony\Component\HttpFoundation\Response' class.
+        ApiPlatform\Core\Exception\InvalidArgumentException: !php/const Symfony\Component\HttpFoundation\Response::HTTP_BAD_REQUEST
+
+        ApiPlatform\Core\Exception\FilterValidationException: 400
+
+        Doctrine\ORM\OptimisticLockException: 409

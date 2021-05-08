@@ -80,7 +80,7 @@ class ImportGenusCommand extends Command
 
 		$url = new Url();
 		$url->setName("Plantnet");
-		$url->setUrl("https://identify.plantnet.org/species/the-plant-list/");
+		$url->setUrl("https://identify.plantnet.org/species/the-plantHandler-list/");
 		$this->entityManager->persist($url);
 		$this->entityManager->flush();
 
@@ -338,7 +338,7 @@ class ImportGenusCommand extends Command
 				$plant->setUrlPowo(str_replace("http://powo.science.kew.org/taxon/urn:lsid:ipni.org:names:", "", $record['url_powo']));
 			}
 			if ($record['url_plantnet']) {
-				$plant->setUrlPlantnet(str_replace("https://identify.plantnet.org/species/the-plant-list/", "", $record['url_plantnet']));
+				$plant->setUrlPlantnet(str_replace("https://identify.plantnet.org/species/the-plantHandler-list/", "", $record['url_plantnet']));
 			}
 			if ($record['url_gbif']) {
 				$plant->setUrlGbif(str_replace("https://www.gbif.org/species/", "", $record['url_gbif']));

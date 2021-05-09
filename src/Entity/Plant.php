@@ -13,7 +13,8 @@ use Symfony\Component\Serializer\Annotation\Groups;
  * @ORM\Entity(repositoryClass=PlantRepository::class)
  */
 #[ApiResource(
-    normalizationContext: ['groups' => ['read:collection']],
+    routePrefix: '/v1',
+    normalizationContext: ['groups' => ['read:Plant:collection']],
     collectionOperations: [
         'get' => [ 'normalization_context' => ['groups' => ['read:Plant:collection', 'read:Plant']]
         ]

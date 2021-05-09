@@ -10,9 +10,11 @@ use ApiPlatform\Core\Annotation\ApiResource;
 /**
  * @ORM\Entity(repositoryClass=UrlRepository::class)
  */
-#[ApiResource(collectionOperations: [
-    'get' => ['method' => 'get'],
-],
+#[ApiResource(
+    routePrefix: '/v1',
+    collectionOperations: [
+        'get' => ['method' => 'get'],
+    ],
     itemOperations: [
         'get' => ['method' => 'get'],
     ],

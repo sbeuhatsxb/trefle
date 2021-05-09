@@ -17,7 +17,7 @@ class IndexBuilder
     public function create()
     {
         // We name our index "plant"
-        $index = $this->client->getIndex('plant');
+        $index = $this->client->getIndex('plantapi');
         $settings = Yaml::parse(
             file_get_contents(
                 __DIR__.'/../../config/elasticsearch/plant_mapping.yaml'

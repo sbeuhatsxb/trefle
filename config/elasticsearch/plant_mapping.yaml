@@ -14,12 +14,7 @@ mappings:
       analyzer: english
     family_common_name:
       type: text
-      analyzer: english
     synonyms:
       type: text
     common_names:
       type: text
-    edible:
-      type: boolean
-    vegetable:
-      type: boolean

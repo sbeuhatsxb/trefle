@@ -12,14 +12,12 @@ class PlantIndexer
 {
     private $client;
     private $plantRepository;
-    private $router;
     private $entityManager;
 
-    public function __construct(Client $client, PlantRepository $plantRepository, UrlGeneratorInterface $router, EntityManagerInterface $entityManager)
+    public function __construct(Client $client, PlantRepository $plantRepository, EntityManagerInterface $entityManager)
     {
         $this->client = $client;
         $this->plantRepository = $plantRepository;
-        $this->router = $router;
         $this->entityManager = $entityManager;
     }
 
@@ -30,17 +28,10 @@ class PlantIndexer
             [
                 'scientific_name' => $plant->getScientificName(),
                 'common_name' => $plant->getCommonName(),
-                'family_common_name' => $plant->getFamilyCommonName(),
                 'synonyms' => $plant->getSynonyms(),
                 'common_names' => $plant->getCommonNames(),
-                'vegetable' => $plant->getVegetable(),
-                'edible' => $plant->getEdible(),
-
-                // Not indexed but needed for display
-                //'url' => $this->router->generate('blog_post', ['slug' => $plantHandler->getScientificName()], UrlGeneratorInterface::ABSOLUTE_PATH),
-//                'date' => $plantHandler->getPublishedAt()->format('M d, Y'),
             ],
-            "plantHandler" // Types are deprecated, to be removed in Elastic 7
+            "plantApi" // Types are deprecated, to be removed in Elastic 7
         );
     }
 
@@ -53,8 +44,8 @@ class PlantIndexer
         $index = $this->client->getIndex($indexName);
 
         $documents = [];
-        foreach ($allPlant as $post) {
-            $documents[] = $this->buildDocument($post);
+        foreach ($allPlant as $plant) {
+            $documents[] = $this->buildDocument($plant);
             $this->entityManager->clear();
         }
 

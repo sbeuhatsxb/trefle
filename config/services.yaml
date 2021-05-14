@@ -37,7 +37,7 @@ services:
 
     Elastica\Client:
         $config:
-            host: '%env(string:ES_URL)%'
-            port: '%env(string:ES_PORT)%'
-            username: '%env(string:ES_USER)%'
-            password: '%env(string:ES_PW)%'
+            host: ['%env(string:ES_URL)%']
+            port: ['%env(string:ES_PORT)%']
+            username: ['%env(string:ES_USER)%']
+            password: ['%env(string:ES_PW)%']

@@ -83,11 +83,11 @@
         "symfony": {
             "allow-contrib": false,
             "require": "5.2.*"
+        },
+        "paas": {
+            "compile": [
+                "php bin/console elastic:reindex"
+            ]
         }
-    },
-    "paas": {
-        "compile": [
-            "php bin/console elastic:reindex"
-        ]
     }
 }

@@ -37,4 +37,4 @@ services:
 
     Elastica\Client:
         $config:
-            host: $SCALINGO_ELASTICSEARCH_URL
+            host: elasticsearch-1

@@ -4,7 +4,7 @@
 # Put parameters here that don't need to change on each machine where the app is deployed
 # https://symfony.com/doc/current/best_practices/configuration.html#application-related-configuration
 parameters:
-    es_config: {'hosts': ['trefle-3690']}
+#    es_config: {'hosts': ['http://es:9200']}
 services:
     # default configuration for services in *this* file
     _defaults:
@@ -37,4 +37,4 @@ services:
 
     Elastica\Client:
         $config:
-            host: docker_es_1
+            host: trefle-3690

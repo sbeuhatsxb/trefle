@@ -4,7 +4,7 @@
 # Put parameters here that don't need to change on each machine where the app is deployed
 # https://symfony.com/doc/current/best_practices/configuration.html#application-related-configuration
 parameters:
-    es_config: {'hosts': ['http://trefle-3690:Ln2rJIWH-dj-3Z58QGhB@trefle-3690.elasticsearch.dbs.scalingo.com:30624']}
+    es_config: {'hosts': ['trefle-3690']}
 services:
     # default configuration for services in *this* file
     _defaults:

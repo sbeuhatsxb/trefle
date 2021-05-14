@@ -37,4 +37,4 @@ services:
 
     Elastica\Client:
         $config:
-            host: trefle-3690
+            host: Elasticsearch

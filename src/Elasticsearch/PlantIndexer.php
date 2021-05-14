@@ -49,7 +49,7 @@ class PlantIndexer
 //            $this->entityManager->clear();
 //        }
 //
-        for($i = 0; i< count($allPlant); $i++){
+        for($i = 0; $i< count($allPlant); $i++){
             $documents[] = $this->buildDocument($allPlant[$i]);
             if((count($allPlant) % 500 === 0) and $i != 0){
                 $index->addDocuments($documents);

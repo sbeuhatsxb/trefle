@@ -52,15 +52,15 @@ class PlantIndexer
         for($i = 0; $i< count($allPlant); $i++){
             $documents[] = $this->buildDocument($allPlant[$i]);
             if((count($allPlant) % 500 === 0) and $i != 0){
+                echo $allPlant[$i]->getScientificName();
                 $index->addDocuments($documents);
                 $this->entityManager->clear();
-                $index->refresh();
                 $documents = [];
             }
         }
 
         $index->addDocuments($documents);
         $index->refresh();
-        $index->flush();
+
     }
 }

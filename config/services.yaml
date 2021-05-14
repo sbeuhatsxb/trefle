@@ -37,4 +37,7 @@ services:
 
     Elastica\Client:
         $config:
-            host: $SCALINGO_ELASTICSEARCH_URL
+            host: ES_URL
+            port: ES_PORT
+            username: ES_USER
+            password: ES_PW

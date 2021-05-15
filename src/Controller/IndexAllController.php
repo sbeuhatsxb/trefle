@@ -20,13 +20,11 @@ use Symfony\Component\HttpFoundation\Response;
 class IndexAllController extends AbstractController
 {
     /**
-     * @Route("/api/v1/species/token={token}/indexall", methods={"GET"})
+     * @Route("/token={token}/indexall", methods={"GET"})
      * @param Request $request
      * @param Client $client
      * @return Response
      */
-    private $indexBuilder;
-
     public function search(Request $request, EntityManagerInterface $entityManager, Client $client, $token, PlantIndexer $plantIndexer): Response
     {
         $tokenRepo = $entityManager->getRepository(Token::class);

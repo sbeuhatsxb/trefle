@@ -41,12 +41,9 @@ class ElasticReindexCommand extends Command
 
         $index = $this->indexBuilder->create();
 
-        if($index->exists()){
-            $this->plantIndexer->indexAllDocuments($index->getName());
-            $io->success('Index populated and ready!');
-        } else {
-            $io->error('Index was not found');
-        }
+
+        $this->plantIndexer->indexAllDocuments($index->getName());
+        $io->success('Index populated and ready!');
 
 
         return Command::SUCCESS;

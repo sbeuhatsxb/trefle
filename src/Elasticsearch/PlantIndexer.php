@@ -38,7 +38,7 @@ class PlantIndexer
     public function indexAllDocuments($indexName)
     {
         $this->client->connect();
-        $index = $this->client->getIndex("plantapi");
+        $index = $this->client->getIndex('plantapi')->getName();
         //docker exec -it symfony php -d memory_limit=4096M bin/console elastic:reindex --no-debug --env=prod
         $this->entityManager->getConnection()->getConfiguration()->setSQLLogger(null);
         //$allPlant = $this->plantRepository->findByOffsetLimit(1, 500);
@@ -52,25 +52,23 @@ class PlantIndexer
 
 //        $index = $this->client->getIndex($indexName);
 
-        if($index->exists()){
-            $documents = [];
-            $offset = 0;
-            $limit = 500;
-            $stopper = $limit;
-            for($i = 0; $i < $total; $i+=$stopper) {
-                if ($i + $limit > $total) {
-                    $limit = $total - $i;
-                }
-                $plants = $this->plantRepository->findByOffsetLimit($offset, $limit);
-                foreach ($plants as $plant) {
-                    $documents[] = $this->buildDocument($plant);
-                }
-                $index->addDocuments($documents);
-                $index->refresh();
-                $documents = [];
-                $this->entityManager->clear();
-                $offset += $limit;
+        $documents = [];
+        $offset = 0;
+        $limit = 500;
+        $stopper = $limit;
+        for($i = 0; $i < $total; $i+=$stopper) {
+            if ($i + $limit > $total) {
+                $limit = $total - $i;
             }
+            $plants = $this->plantRepository->findByOffsetLimit($offset, $limit);
+            foreach ($plants as $plant) {
+                $documents[] = $this->buildDocument($plant);
+            }
+            $index->addDocuments($documents);
+            $index->refresh();
+            $documents = [];
+            $this->entityManager->clear();
+            $offset += $limit;
 
         }
 

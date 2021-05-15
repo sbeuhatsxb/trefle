@@ -16,6 +16,7 @@ use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Yaml\Yaml;
 
 class IndexAllController extends AbstractController
 {
@@ -25,7 +26,7 @@ class IndexAllController extends AbstractController
      * @param Client $client
      * @return Response
      */
-    public function search(Request $request, EntityManagerInterface $entityManager, Client $client, $token, PlantIndexer $plantIndexer): Response
+    public function search(Request $request, EntityManagerInterface $entityManager, Client $client, $token): Response
     {
         $tokenRepo = $entityManager->getRepository(Token::class);
         $plantRepo = $entityManager->getRepository(Plant::class);
@@ -41,6 +42,7 @@ class IndexAllController extends AbstractController
             );
             $index->create($settings, true);
 
+            /** @var Plant[] $allPlant */
             $allPlant = $plantRepo->findAll();
 
             $documents = [];

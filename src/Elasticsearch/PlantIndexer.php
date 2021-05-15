@@ -60,6 +60,6 @@ class PlantIndexer
 
         $index->addDocuments($documents);
         $index->refresh();
-
+        return $index->count('id');
     }
 }

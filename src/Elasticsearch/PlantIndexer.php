@@ -31,7 +31,7 @@ class PlantIndexer
                 'synonyms' => $plant->getSynonyms(),
                 'common_names' => $plant->getCommonNames(),
             ],
-            "_doc" // Types are deprecated, to be removed in Elastic 7
+            "plantapi" // Types are deprecated, to be removed in Elastic 7
         );
     }
 

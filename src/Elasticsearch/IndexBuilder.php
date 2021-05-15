@@ -23,7 +23,6 @@ class IndexBuilder
                 __DIR__.'/../../config/elasticsearch/plant_mapping.yaml'
             )
         );
-
         // We build our index settings and mapping
         $index->create($settings, true);
 

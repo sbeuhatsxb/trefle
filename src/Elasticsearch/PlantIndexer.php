@@ -52,8 +52,6 @@ class PlantIndexer
         for($i = 0; $i< count($allPlant); $i++){
             $documents[] = $this->buildDocument($allPlant[$i]);
             if((count($allPlant) % 500 === 0) and $i != 0){
-                echo $index->getName() . ' : ' . $allPlant[$i]->getScientificName() . "\n";
-
                 $index->addDocuments($documents);
                 $this->entityManager->clear();
                 $documents = [];

@@ -1,0 +1,18 @@
+{
+  "name": "Trefle",
+  "description": "API providing plants informations for robots !",
+  "logo": "",
+  "repository": "https://github.com/sbeuhatsxb/trefle",
+  "website": "https://trefle.osc-fr1.scalingo.io/api",
+  "env": {
+    "VAR_TEST_1": {
+      "description": "",
+      "value": "1"
+    },
+    "VAR_SECRET_1": {
+      "description": "",
+      "generator": "secret"
+    }
+  },
+  "addons": ["kibana"]
+}

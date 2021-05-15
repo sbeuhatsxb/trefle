@@ -39,14 +39,14 @@ class PlantIndexer
     {
         //docker exec -it symfony php -d memory_limit=4096M bin/console elastic:reindex --no-debug --env=prod
         $this->entityManager->getConnection()->getConfiguration()->setSQLLogger(null);
-        $q = $this->entityManager->createQuery('select u from App\Entity\Plant u');
+        $allPlant = $this->plantRepository->findByOffsetLimit(1, 500);
 
         $index = $this->client->getIndex($indexName);
 
         $documents = [];
-        foreach ($q->toIterable() as $plant) {
+        foreach ($allPlant->toIterable() as $plant) {
             $documents[] = $this->buildDocument($plant);
-            $this->entityManager->detach($plant[0]);
+            $this->entityManager->clear();
         }
 //
 //        for($i = 0; $i< count($allPlant); $i++){
@@ -60,7 +60,7 @@ class PlantIndexer
 //            }
 //        }
 
-        $index->addDocuments($documents);
+//        $index->addDocuments($documents);
         $index->refresh();
     }
 }

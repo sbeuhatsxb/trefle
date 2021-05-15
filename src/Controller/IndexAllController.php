@@ -55,7 +55,7 @@ class IndexAllController extends AbstractController
             $index->addDocuments($documents);
             $index->refresh();
 
-            $response = new Response(json_encode($client->getIndex('plantapi')), 200);
+            $response = new Response(json_encode($client->getIndex($settings)), 200);
 //            $response = new Response(json_encode($array), 401);
 //            $response->headers->set('Content-Type', 'application/json');
 

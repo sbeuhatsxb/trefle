@@ -18,13 +18,13 @@ class IndexBuilder
     {
         // We name our index "plant"
         $index = $this->client->getIndex('plantapi');
-//        $settings = Yaml::parse(
-//            file_get_contents(
-//                __DIR__.'/../../config/elasticsearch/plant_mapping.yaml'
-//            )
-//        );
-//        // We build our index settings and mapping
-//        $index->create($settings, true);
+        $settings = Yaml::parse(
+            file_get_contents(
+                __DIR__.'/../../config/elasticsearch/plant_mapping.yaml'
+            )
+        );
+        // We build our index settings and mapping
+        $index->create($settings, true);
 
         return $index;
     }

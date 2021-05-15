@@ -43,7 +43,8 @@ class IndexAllController extends AbstractController
             $index->create($settings, true);
 
             /** @var Plant[] $allPlant */
-            $allPlant = $plantRepo->findAll();
+            //$allPlant = $plantRepo->findAll();
+            $allPlant = $plantRepo->findByOffsetLimit(1, 500);
 
             $documents = [];
             foreach ($allPlant as $plant) {

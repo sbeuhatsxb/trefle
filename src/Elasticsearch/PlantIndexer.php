@@ -44,7 +44,7 @@ class PlantIndexer
         $index = $this->client->getIndex($indexName);
 
         $documents = [];
-        foreach ($allPlant->toIterable() as $plant) {
+        foreach ($allPlant as $plant) {
             $documents[] = $this->buildDocument($plant);
             $this->entityManager->clear();
         }
@@ -60,7 +60,7 @@ class PlantIndexer
 //            }
 //        }
 
-//        $index->addDocuments($documents);
+        $index->addDocuments($documents);
         $index->refresh();
     }
 }

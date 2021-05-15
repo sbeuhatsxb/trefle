@@ -86,7 +86,7 @@
         },
         "paas": {
             "compile": [
-                "php -d memory_limit=4096M bin/console elastic:reindex --no-debug"
+                "php bin/console elastic:reindex --no-debug"
             ]
         }
     }

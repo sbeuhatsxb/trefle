@@ -43,7 +43,6 @@ class ElasticReindexCommand extends Command
 
         $io->info('Indexing : '.$index->getName().' on '.$index->getClient()->getConfig('host'));
         $io->info('Is client connected :'.$index->getClient()->hasConnection());
-        $io->info('Version :'.$index->getClient()->getVersion());
         $io->info('Username :'.$index->getClient()->getConnection()->getUsername());
         $io->info('Path :'.$index->getClient()->getConnection()->getPath());
         $io->info('Host :'.$index->getClient()->getConnection()->getHost());

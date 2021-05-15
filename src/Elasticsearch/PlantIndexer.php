@@ -39,27 +39,28 @@ class PlantIndexer
     {
         //docker exec -it symfony php -d memory_limit=4096M bin/console elastic:reindex --no-debug --env=prod
         $this->entityManager->getConnection()->getConfiguration()->setSQLLogger(null);
-        $allPlant = $this->plantRepository->findAll();
+        $q = $this->entityManager->createQuery('select u from App\Entity\Plant u');
 
         $index = $this->client->getIndex($indexName);
-//
-//        $documents = [];
-//        foreach ($allPlant as $plant) {
-//            $documents[] = $this->buildDocument($plant);
-//            $this->entityManager->clear();
-//        }
-//
-        for($i = 0; $i< count($allPlant); $i++){
-            $documents[] = $this->buildDocument($allPlant[$i]);
-            if((count($allPlant) % 500 === 0) and $i != 0){
-                $index->addDocuments($documents);
-                $this->entityManager->clear();
-                $documents = [];
-                $index->refresh();
-                return;
-            }
-        }
 
-//        $index->addDocuments($documents);
+        $documents = [];
+        foreach ($q->toIterable() as $plant) {
+            $documents[] = $this->buildDocument($plant);
+            $this->entityManager->detach($plant[0]);
+        }
+//
+//        for($i = 0; $i< count($allPlant); $i++){
+//            $documents[] = $this->buildDocument($allPlant[$i]);
+//            if((count($allPlant) % 500 === 0) and $i != 0){
+//                $index->addDocuments($documents);
+//                $this->entityManager->clear();
+//                $documents = [];
+//                $index->refresh();
+//                return;
+//            }
+//        }
+
+        $index->addDocuments($documents);
+        $index->refresh();
     }
 }

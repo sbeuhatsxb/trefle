@@ -38,7 +38,7 @@ class PlantIndexer
     public function indexAllDocuments($indexName)
     {
         $this->client->connect();
-        $index = $this->client->getIndex('plantapi')->getName();
+        $index = $this->client->getIndex('plantapi');
         $this->entityManager->getConnection()->getConfiguration()->setSQLLogger(null);
 
         $total = $this->plantRepository->createQueryBuilder('a')
@@ -60,8 +60,8 @@ class PlantIndexer
             foreach ($plants as $plant) {
                 $documents[] = $this->buildDocument($plant);
             }
-            $this->client->addDocuments($documents);
-            $this->client->refreshAll();
+            $index->addDocuments($documents);
+            $index->refresh();
             $documents = [];
             $this->entityManager->clear();
             $offset += $limit;

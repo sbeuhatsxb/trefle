@@ -71,7 +71,7 @@ class IndexBuilder
                 ),
         );
 
-        $mapping->send();
+        $mapping->send($index);
         return $index;
     }
 }

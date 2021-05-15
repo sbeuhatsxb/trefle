@@ -49,12 +49,13 @@ class IndexAllController extends AbstractController
             $documents = [];
             foreach ($allPlant as $plant) {
                 $documents[] = $this->buildDocument($plant);
+                $ids[] = $plant->getId();
             }
 
             $index->addDocuments($documents);
             $index->refresh();
 
-            $response = new Response(json_encode($allPlant), 200);
+            $response = new Response(json_encode($ids), 200);
 //            $response = new Response(json_encode($array), 401);
 //            $response->headers->set('Content-Type', 'application/json');
 

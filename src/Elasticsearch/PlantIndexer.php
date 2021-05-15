@@ -40,28 +40,39 @@ class PlantIndexer
         //docker exec -it symfony php -d memory_limit=4096M bin/console elastic:reindex --no-debug --env=prod
         $this->entityManager->getConnection()->getConfiguration()->setSQLLogger(null);
         //$allPlant = $this->plantRepository->findByOffsetLimit(1, 500);
-        $allPlant = $this->plantRepository->findAll();
+
+        //$allPlant = $this->plantRepository->findAll();
+
+        $total = $this->plantRepository->createQueryBuilder('a')
+            ->select('count(a.id)')
+            ->getQuery()
+            ->getSingleScalarResult();
 
         $index = $this->client->getIndex($indexName);
 
         $documents = [];
-        foreach ($allPlant as $plant) {
-            $documents[] = $this->buildDocument($plant);
-            $this->entityManager->clear();
-        }
-//
-//        for($i = 0; $i< count($allPlant); $i++){
-//            $documents[] = $this->buildDocument($allPlant[$i]);
-//            if((count($allPlant) % 500 === 0) and $i != 0){
-//                $index->addDocuments($documents);
-//                $this->entityManager->clear();
-//                $documents = [];
-//                $index->refresh();
-//                return;
-//            }
+//        foreach ($allPlant as $plant) {
+//            $documents[] = $this->buildDocument($plant);
+//            $this->entityManager->clear();
 //        }
+//
+        $offset = 0;
+        $limit = 500;
+        $stopper = $limit;
+        for($i = 0; $i < $total; $i+=$stopper){
+            if($i+$limit > $total){
+                $limit = $total - $i;
+            }
+            $plants = $this->plantRepository->findByOffsetLimit($offset, $limit);
+            foreach ($plants as $plant) {
+                $documents[] = $this->buildDocument($plant);
+            }
+            $index->addDocuments($documents);
+            $index->refresh();
+            $documents = [];
+            $this->entityManager->clear();
+            $offset += $limit;
+        }
 
-        $index->addDocuments($documents);
-        $index->refresh();
     }
 }

@@ -48,7 +48,7 @@ class ElasticReindexCommand extends Command
 
         $io->success('Index populated and ready!');
         $io->success($index->getMapping());
-        
+
         return Command::SUCCESS;
     }
 }

@@ -42,24 +42,24 @@ class PlantIndexer
         $allPlant = $this->plantRepository->findAll();
 
         $index = $this->client->getIndex($indexName);
-
-        $documents = [];
-        foreach ($allPlant as $plant) {
-            $documents[] = $this->buildDocument($plant);
-            $this->entityManager->clear();
-        }
 //
-//        for($i = 0; $i< count($allPlant); $i++){
-//            $documents[] = $this->buildDocument($allPlant[$i]);
-//            if((count($allPlant) % 500 === 0) and $i != 0){
-//                $index->addDocuments($documents);
-//                $this->entityManager->clear();
-//                $documents = [];
-//            }
+//        $documents = [];
+//        foreach ($allPlant as $plant) {
+//            $documents[] = $this->buildDocument($plant);
+//            $this->entityManager->clear();
 //        }
+//
+        for($i = 0; $i< count($allPlant); $i++){
+            $documents[] = $this->buildDocument($allPlant[$i]);
+            if((count($allPlant) % 500 === 0) and $i != 0){
+                $index->addDocuments($documents);
+                $this->entityManager->clear();
+                $documents = [];
+                $index->refresh();
+                return;
+            }
+        }
 
-        $index->addDocuments($documents);
-        $index->refresh();
-        return $index->count('id');
+//        $index->addDocuments($documents);
     }
 }

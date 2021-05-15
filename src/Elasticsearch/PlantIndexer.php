@@ -38,7 +38,7 @@ class PlantIndexer
     public function indexAllDocuments($indexName)
     {
         $this->client->connect();
-        return $this->client->getStatus()->indexExists('plantapi');
+        $index = $this->client->getIndex("plantapi");
         //docker exec -it symfony php -d memory_limit=4096M bin/console elastic:reindex --no-debug --env=prod
         $this->entityManager->getConnection()->getConfiguration()->setSQLLogger(null);
         //$allPlant = $this->plantRepository->findByOffsetLimit(1, 500);
@@ -50,7 +50,7 @@ class PlantIndexer
             ->getQuery()
             ->getSingleScalarResult();
 
-        $index = $this->client->getIndex($indexName);
+//        $index = $this->client->getIndex($indexName);
 
         if($index->exists()){
             $documents = [];

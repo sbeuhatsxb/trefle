@@ -37,28 +37,26 @@ class PlantIndexer
 
     public function indexAllDocuments($indexName)
     {
-        return $this->client->hasConnection();
-
         //docker exec -it symfony php -d memory_limit=4096M bin/console elastic:reindex --no-debug --env=prod
         $this->entityManager->getConnection()->getConfiguration()->setSQLLogger(null);
         $allPlant = $this->plantRepository->findAll();
 
         $index = $this->client->getIndex($indexName);
 
-//        $documents = [];
-//        foreach ($allPlant as $plant) {
-//            $documents[] = $this->buildDocument($plant);
-//            $this->entityManager->clear();
-//        }
-//
-        for($i = 0; $i< count($allPlant); $i++){
-            $documents[] = $this->buildDocument($allPlant[$i]);
-            if((count($allPlant) % 500 === 0) and $i != 0){
-                $index->addDocuments($documents);
-                $this->entityManager->clear();
-                $documents = [];
-            }
+        $documents = [];
+        foreach ($allPlant as $plant) {
+            $documents[] = $this->buildDocument($plant);
+            $this->entityManager->clear();
         }
+//
+//        for($i = 0; $i< count($allPlant); $i++){
+//            $documents[] = $this->buildDocument($allPlant[$i]);
+//            if((count($allPlant) % 500 === 0) and $i != 0){
+//                $index->addDocuments($documents);
+//                $this->entityManager->clear();
+//                $documents = [];
+//            }
+//        }
 
         $index->addDocuments($documents);
         $index->refresh();

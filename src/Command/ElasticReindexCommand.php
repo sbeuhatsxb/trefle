@@ -41,12 +41,23 @@ class ElasticReindexCommand extends Command
 
         $index = $this->indexBuilder->create();
 
-        $io->success('Index created!');
-        $io->success($index->getName());
+        $io->info('Indexing : '.$index->getName().' on '.$index->getClient()->getConfig('host'));
+        $io->info('Is client connected :'.$index->getClient()->hasConnection());
+        $io->info('Version :'.$index->getClient()->getVersion());
+        $io->info('Username :'.$index->getClient()->getConnection()->getUsername());
+        $io->info('Path :'.$index->getClient()->getConnection()->getPath());
+        $io->info('Host :'.$index->getClient()->getConnection()->getHost());
+        $io->info('Path :'.$index->getClient()->getStatus()->indexExists('plantapi'));
+        $io->info('Path :'.$index->getClient()->getStatus()->getResponse()->getData());
 
-        $this->plantIndexer->indexAllDocuments($index->getName());
 
-        $io->success('Index populated and ready!');
+        if($index->exists()){
+            $this->plantIndexer->indexAllDocuments($index->getName());
+            $io->success('Index populated and ready!');
+        } else {
+            $io->error('Index was not found');
+        }
+
 
         return Command::SUCCESS;
     }

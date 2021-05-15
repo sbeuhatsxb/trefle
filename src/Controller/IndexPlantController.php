@@ -43,6 +43,9 @@ class IndexPlantController extends AbstractController
             $index = $this->indexBuilder->create();
 
             $this->plantIndexer->indexAllDocuments($index->getName());
+            $response = new Response(json_encode(['Index done.']), 200);
+            $response->headers->set('Content-Type', 'application/json');
+            return $response;
 
         } else {
             $array = array('401' => 'Valid token requested');

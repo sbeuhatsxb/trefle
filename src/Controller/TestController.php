@@ -35,7 +35,6 @@ class TestController extends AbstractController
             $this->client->getIndex('plantapi')->getName(),
             $this->client->getIndex('plantapi')->getMapping(),
             $this->client->getIndex('plantapi')->getClient()->hasConnection(),
-            $this->client->getIndex('plantapi')->getClient()->getVersion(),
             ]), 200);
         $response->headers->set('Content-Type', 'application/json');
 

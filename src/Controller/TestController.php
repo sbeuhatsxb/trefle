@@ -27,10 +27,8 @@ class TestController extends AbstractController
     {
         $client = new Client();
 
-        $client->connect();
 
-
-        $response = new Response(json_encode($client->getStatus()->getIndexNames()), 200);
+        $response = new Response(json_encode($client->getConfig('host'), $client->getConfig('port'), $client->getConfig('username')), 200);
         $response->headers->set('Content-Type', 'application/json');
 
         return $response;

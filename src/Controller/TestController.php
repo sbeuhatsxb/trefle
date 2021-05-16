@@ -20,14 +20,12 @@ use Symfony\Component\HttpFoundation\Response;
 
 class TestController extends AbstractController
 {
-    private $client;
-    private $plantRepository;
 
     /**
      * @Route("/test", methods={"GET"})
      * @return Response
      */
-    public function test(PlantRepository $plantRepository, Client $client): Response
+    public function test(): Response
     {
         $client = new Client();
 
@@ -39,4 +37,5 @@ class TestController extends AbstractController
         $response->headers->set('Content-Type', 'application/json');
 
         return $response;
+    }
 }

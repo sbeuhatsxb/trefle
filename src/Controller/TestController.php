@@ -20,16 +20,18 @@ use Symfony\Component\HttpFoundation\Response;
 
 class TestController extends AbstractController
 {
+    private $client;
 
     /**
      * @Route("/test", methods={"GET"})
      * @return Response
      */
-    public function test(): Response
+    public function test(Client $client): Response
     {
-        $client = new Client();
 
-        $path = '_aliases?pretty';
+        $client->connect();
+
+        $path = '/_aliases?pretty';
 
         $response = $client->request($path, Request::METHOD_GET);
         $responseArray = $response->getData();

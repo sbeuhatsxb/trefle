@@ -19,6 +19,16 @@ class PlantRepository extends ServiceEntityRepository
         parent::__construct($registry, Plant::class);
     }
 
+    public function findByOffsetLimit($offset, $limit)
+    {
+        return $this->createQueryBuilder('p')
+            ->setFirstResult($offset)
+            ->setMaxResults($limit)
+            ->getQuery()
+            ->getResult()
+            ;
+    }
+
     // /**
     //  * @return Plant[] Returns an array of Plant objects
     //  */

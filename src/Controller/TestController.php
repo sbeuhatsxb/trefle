@@ -28,8 +28,15 @@ class TestController extends AbstractController
     public function test(Client $client): Response
     {
         $this->client = $client;
-
-        $response = new Response(json_encode([$this->client->getIndex('plantapi')->getMapping()]), 200);
+        $this->client->connect();
+        $response = new Response(json_encode([
+            $this->client->getConnection()->getUsername(),
+            $this->client->getConnection()->getHost(),
+            $this->client->getConnection()->getPath(),
+            $this->client->getConnection()->getParams(),
+            $this->client->getConnection()->getAuthType(),
+            $this->client->getConnection()->getPassword(),
+            ]), 200);
         $response->headers->set('Content-Type', 'application/json');
 
         return $response;

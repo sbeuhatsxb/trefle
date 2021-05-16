@@ -29,7 +29,7 @@ class TestController extends AbstractController
     {
         $this->client = $client;
 
-        $response = new Response(json_encode([$this->client->getIndex('plantapi')->getStats()->getData()]), 200);
+        $response = new Response(json_encode([$this->client->getIndex('plantapi')->getMapping()]), 200);
         $response->headers->set('Content-Type', 'application/json');
 
         return $response;

@@ -19,15 +19,17 @@ use Symfony\Component\HttpFoundation\Response;
 
 class TestController extends AbstractController
 {
+    private $client;
+
     /**
      * @Route("/test", methods={"GET"})
      * @return Response
      */
-    public function test(): Response
+    public function test(Client $client): Response
     {
-        $client = new Client();
+        $this->client = $client;
 
-        $response = new Response(json_encode([$client->getConfig('host'), $client->getConfig('port'), $client->getConfig('username')]), 200);
+        $response = new Response(json_encode([$this->client->getIndex('plantapi')->getStats()->getData()]), 200);
         $response->headers->set('Content-Type', 'application/json');
 
         return $response;

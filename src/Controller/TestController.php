@@ -29,12 +29,12 @@ class TestController extends AbstractController
 
         $index = $client->getIndex('test');
         $index->create(array(), true);
-        $type->addDocument(new Document(1, array('username' => 'ruflin'), "_doc"));
+        $index->addDocument(new Document(1, array('username' => 'ruflin'), "_plantapi"));
         $index->refresh();
 
         $query = '{"query":{"query_string":{"query":"ruflin"}}}';
 
-        $path = $index->getName() . '/' . $type->getName() . '/_search';
+        $path = $index->getName() . '/_plantapi/_search';
 
         $response = $client->request($path, Request::METHOD_GET, $query);
         $responseArray = $response->getData();

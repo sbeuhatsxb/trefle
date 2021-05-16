@@ -52,21 +52,21 @@ class PlantIndexer
         $offset = 0;
         $limit = 500;
         $stopper = $limit;
-        for($i = 0; $i < $total; $i+=$stopper) {
-            if ($i + $limit > $total) {
-                $limit = $total - $i;
-            }
-            $plants = $this->plantRepository->findByOffsetLimit($offset, $limit);
-            foreach ($plants as $plant) {
-                $documents[] = $this->buildDocument($plant);
-            }
-            $index->addDocuments($documents);
-            $index->refresh();
-            $documents = [];
-            $this->entityManager->clear();
-            $offset += $limit;
-
-        }
+//        for($i = 0; $i < $total; $i+=$stopper) {
+//            if ($i + $limit > $total) {
+//                $limit = $total - $i;
+//            }
+//            $plants = $this->plantRepository->findByOffsetLimit($offset, $limit);
+//            foreach ($plants as $plant) {
+//                $documents[] = $this->buildDocument($plant);
+//            }
+//            $index->addDocuments($documents);
+//            $index->refresh();
+//            $documents = [];
+//            $this->entityManager->clear();
+//            $offset += $limit;
+//
+//        }
 
     }
 }

@@ -31,42 +31,42 @@ class PlantIndexer
                 'synonyms' => $plant->getSynonyms(),
                 'common_names' => $plant->getCommonNames(),
             ],
-            "plantapi" // Types are deprecated, to be removed in Elastic 7
+            "plantApi" // Types are deprecated, to be removed in Elastic 7
         );
     }
 
     public function indexAllDocuments($indexName)
     {
-        $this->client->connect();
-        $index = $this->client->getIndex('plantapi');
+        //docker exec -it symfony php -d memory_limit=4096M bin/console elastic:reindex --no-debug --env=prod
         $this->entityManager->getConnection()->getConfiguration()->setSQLLogger(null);
+        //        $allPlant = $this->plantRepository->findAll();
+
+        $index = $this->client->getIndex($indexName);
 
         $total = $this->plantRepository->createQueryBuilder('a')
             ->select('count(a.id)')
             ->getQuery()
             ->getSingleScalarResult();
 
-//        $index = $this->client->getIndex($indexName);
+        //        $index = $this->client->getIndex($indexName);
 
         $documents = [];
         $offset = 0;
         $limit = 500;
         $stopper = $limit;
-//        for($i = 0; $i < $total; $i+=$stopper) {
-//            if ($i + $limit > $total) {
-//                $limit = $total - $i;
-//            }
-//            $plants = $this->plantRepository->findByOffsetLimit($offset, $limit);
-//            foreach ($plants as $plant) {
-//                $documents[] = $this->buildDocument($plant);
-//            }
-//            $index->addDocuments($documents);
-//            $index->refresh();
-//            $documents = [];
-//            $this->entityManager->clear();
-//            $offset += $limit;
-//
-//        }
-
+        for ($i = 0; $i < $total; $i += $stopper) {
+            if ($i + $limit > $total) {
+                $limit = $total - $i;
+            }
+            $plants = $this->plantRepository->findByOffsetLimit($offset, $limit);
+            foreach ($plants as $plant) {
+                $documents[] = $this->buildDocument($plant);
+            }
+            $index->addDocuments($documents);
+            $index->refresh();
+            $documents = [];
+            $this->entityManager->clear();
+            $offset += $limit;
+        }
     }
 }

@@ -30,12 +30,12 @@ class TestController extends AbstractController
         $this->client = $client;
         $this->client->connect();
         $response = new Response(json_encode([
-            $this->client->getConnection()->getUsername(),
-            $this->client->getConnection()->getHost(),
-            $this->client->getConnection()->getPath(),
-            $this->client->getConnection()->getParams(),
-            $this->client->getConnection()->getAuthType(),
-            $this->client->getConnection()->getPassword(),
+            $this->client->hasConnection(),
+            $this->client->getIndex('plantapi'),
+            $this->client->getIndex('plantapi')->getName(),
+            $this->client->getIndex('plantapi')->getMapping(),
+            $this->client->getIndex('plantapi')->getClient()->hasConnection(),
+            $this->client->getIndex('plantapi')->getClient()->getVersion(),
             ]), 200);
         $response->headers->set('Content-Type', 'application/json');
 

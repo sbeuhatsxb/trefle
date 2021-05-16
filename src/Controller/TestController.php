@@ -29,40 +29,14 @@ class TestController extends AbstractController
      */
     public function test(PlantRepository $plantRepository, Client $client): Response
     {
-        $index = $this->client->getIndex('plantapi');
-        $this->plantRepository = $plantRepository;
-        $this->client = $client;
-        $this->client->connect();
-        $total = $this->plantRepository->createQueryBuilder('a')
-            ->select('count(a.id)')
-            ->getQuery()
-            ->getSingleScalarResult();
-        
-        $documents = [];
-        $offset = 0;
-        $limit = 10;
-        $stopper = $limit;
-        for ($i = 0; $i < $total; $i += $stopper) {
-            if ($i + $limit > $total) {
-                $limit = $total - $i;
-            }
-            $plants = $this->plantRepository->findByOffsetLimit($offset, $limit);
-            foreach ($plants as $plant) {
-                $documents[] = $this->buildDocument($plant);
-            }
-            $index->addDocuments($documents);
-            $index->refreshAll();
-            $documents = [];
-            $offset += $limit;
-        }
+        $client = new Client();
 
-        $response = new Response(json_encode([
-            $this->client->hasConnection(),
-            ]), 200);
+        $path = '_aliases?pretty';
+
+        $response = $client->request($path, Request::METHOD_GET);
+        $responseArray = $response->getData();
+        $response = new Response(json_encode($responseArray), 401);
         $response->headers->set('Content-Type', 'application/json');
 
         return $response;
-
-    }
-
 }

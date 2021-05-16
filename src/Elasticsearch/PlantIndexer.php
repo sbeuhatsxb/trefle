@@ -31,7 +31,7 @@ class PlantIndexer
                 'synonyms' => $plant->getSynonyms(),
                 'common_names' => $plant->getCommonNames(),
             ],
-            "plantApi" // Types are deprecated, to be removed in Elastic 7
+            "plantapi" // Types are deprecated, to be removed in Elastic 7
         );
     }
 
@@ -40,7 +40,7 @@ class PlantIndexer
         //docker exec -it symfony php -d memory_limit=4096M bin/console elastic:reindex --no-debug --env=prod
         $this->entityManager->getConnection()->getConfiguration()->setSQLLogger(null);
         //        $allPlant = $this->plantRepository->findAll();
-
+        
         $index = $this->client->getIndex($indexName);
 
         $total = $this->plantRepository->createQueryBuilder('a')

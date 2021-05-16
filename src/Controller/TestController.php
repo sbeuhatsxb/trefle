@@ -27,20 +27,10 @@ class TestController extends AbstractController
     {
         $client = new Client();
 
-        $index = $client->getIndex('test');
-        $index->create(array(), true);
-        $index->addDocument(new Document(1, array('username' => 'ruflin'), "_plantapi"));
-        $index->refresh();
-
-        $query = '{"query":{"query_string":{"query":"ruflin"}}}';
-
-        $path = $index->getName() . '/_plantapi/_search';
-
-        $response = $client->request($path, Request::METHOD_GET, $query);
-        $responseArray = $response->getData();
+        $client->connect();
 
 
-        $response = new Response(json_encode($responseArray), 200);
+        $response = new Response(json_encode($client->getStatus()->getIndexNames()), 200);
         $response->headers->set('Content-Type', 'application/json');
 
         return $response;

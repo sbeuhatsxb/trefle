@@ -8,6 +8,7 @@ use App\Entity\Token;
 use App\Repository\TokenRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Elasticsearch\Client;
+use Elasticsearch\ClientBuilder;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Routing\Annotation\Route;
@@ -16,14 +17,18 @@ use Symfony\Component\HttpFoundation\Response;
 
 class SearchPlantController extends AbstractController
 {
+    private $client;
     /**
      * @Route("/api/v1/species/token={token}/q={slug}", methods={"GET"})
      * @param Request $request
-     * @param Client $client
+     * @param ClientBuilder $client
      * @return Response
      */
-    public function search(Request $request, EntityManagerInterface $entityManager, Client $client, $slug, $token): Response
+    public function search(Request $request, EntityManagerInterface $entityManager, ClientBuilder $client, $slug, $token): Response
     {
+        $host[] = getenv('SCALINGO_ELASTICSEARCH_URL');
+        $client = $this->client->setHosts($host)->build();
+
         $tokenRepo = $entityManager->getRepository(Token::class);
         $plantRepo = $entityManager->getRepository(Plant::class);
 

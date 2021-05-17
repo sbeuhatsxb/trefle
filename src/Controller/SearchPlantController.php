@@ -35,7 +35,7 @@ class SearchPlantController extends AbstractController
         if($token != null){
 
             $params = [
-                'index' => 'my_index',
+                'index' => 'plantapi',
                 'body'  => [
                     "query" => [
                         "bool" => [

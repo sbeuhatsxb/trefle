@@ -26,7 +26,7 @@ class SearchPlantController extends AbstractController
      */
     public function search(Request $request, EntityManagerInterface $entityManager, ClientBuilder $client, $slug, $token): Response
     {
-        $host[] = getenv('SCALINGO_ELASTICSEARCH_URL');
+        $host[] = $this->getParameter('SCALINGO_ELASTICSEARCH_URL');
         $client = $this->client->setHosts($host)->build();
 
         $tokenRepo = $entityManager->getRepository(Token::class);

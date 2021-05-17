@@ -73,22 +73,19 @@ class PlantIndexer
                         '_index' => 'plantapi',
                         '_type' => 'plant',
                         '_id' => $plant->getId(),
-                    ],
+                    ]
+                ];
+                $params['body'][] = [
                     'scientific_name' => $plant->getScientificName(),
                     'common_name' => $plant->getCommonName(),
                     'synonyms' => $plant->getSynonyms(),
                     'common_names' => $plant->getCommonNames(),
                 ];
-//                $params['body'][] = [
-//                    'scientific_name' => $plant->getScientificName(),
-//                    'common_name' => $plant->getCommonName(),
-//                    'synonyms' => $plant->getSynonyms(),
-//                    'common_names' => $plant->getCommonNames(),
-//                ];
             }
 
-            $client->bulk($params);
-            $params = [];
+            $responses = $client->bulk($params);
+            $params = ['body' => []];
+            unset($responses);
             $this->entityManager->clear();
             $offset += $limit;
         }

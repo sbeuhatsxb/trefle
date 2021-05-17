@@ -7,7 +7,7 @@ use App\Entity\Plant;
 use App\Entity\Token;
 use App\Repository\TokenRepository;
 use Doctrine\ORM\EntityManagerInterface;
-use Elastica\Client;
+use Elasticsearch\ClientBuilder;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Routing\Annotation\Route;
@@ -19,15 +19,40 @@ class SearchPlantController extends AbstractController
     /**
      * @Route("/api/v1/species/token={token}/q={slug}", methods={"GET"})
      * @param Request $request
-     * @param Client $client
+     * @param ClientBuilder $client
      * @return Response
      */
-    public function search(Request $request, EntityManagerInterface $entityManager, Client $client, $slug, $token): Response
+    public function search(Request $request, EntityManagerInterface $entityManager, ClientBuilder $client, $slug, $token): Response
     {
         $tokenRepo = $entityManager->getRepository(Token::class);
         $plantRepo = $entityManager->getRepository(Plant::class);
         $token = $tokenRepo->findOneBy(['token' => $token]);
         if($token != null){
+
+            $params = [
+                'index' => 'my_index',
+                'id'    => 'my_id'
+            ];
+
+            $response = $client->get($params);
+
+            $params = [
+                'index' => 'plantapi',
+                'body'  => [
+                    'query' => [
+                        'match' => [
+                            'scientific_name' => $slug,
+                            'common_name' => $slug,
+                            'common_names' => $slug,
+                            'synonyms' => $slug,
+                        ]
+                    ]
+                ]
+            ];
+
+            $response = $client->search($params);
+            print_r($response);
+
             $foundPlants = $client->getIndex('plantapi')->search($slug);
 
             $results = [];

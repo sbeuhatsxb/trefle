@@ -83,7 +83,7 @@ class PlantIndexer
 
         echo "Parsing documents... this may take a while\n";
         $offset = 0;
-        $limit = 500;
+        $limit = 1000;
         $stopper = $limit;
         for ($i = 0; $i < $total; $i += $stopper) {
             $params = [];
@@ -93,8 +93,6 @@ class PlantIndexer
             $plants = $this->plantRepository->findByOffsetLimit($offset, $limit);
             foreach ($plants as $plant) {
                 $params = $this->setDocument($plant);
-                $params['refresh'] = true;
-//                $client->index($params);
             }
             $client->bulk($params);
             $this->entityManager->clear();

@@ -20,23 +20,6 @@ class PlantIndexer
         $this->client = $client;
     }
 
-    private function setDocument(Plant $plant): array
-    {
-            return $params = [
-                'index' => [
-                    '_index' => 'plantapi',
-                    '_type' => 'plant',
-                    '_id' => $plant->getId(),
-                    'body' => [
-                        'scientific_name' => $plant->getScientificName(),
-                        'common_name' => $plant->getCommonName(),
-                        'synonyms' => $plant->getSynonyms(),
-                        'common_names' => $plant->getCommonNames(),
-                    ]
-                ]
-            ];
-    }
-
     public function indexAllDocuments()
     {
         //docker exec -it symfony php -d memory_limit=4096M bin/console elastic:reindex --no-debug --env=prod
@@ -84,7 +67,19 @@ class PlantIndexer
             }
             $plants = $this->plantRepository->findByOffsetLimit($offset, $limit);
             foreach ($plants as $plant) {
-                $params['body'][] = $this->setDocument($plant);
+                $params['body'][] = [
+                    'index' => [
+                        '_index' => 'plantapi',
+                        '_type' => 'plant',
+                        '_id' => $plant->getId(),
+                    ]
+                ];
+                $params['body'][] = [
+                    'scientific_name' => $plant->getScientificName(),
+                    'common_name' => $plant->getCommonName(),
+                    'synonyms' => $plant->getSynonyms(),
+                    'common_names' => $plant->getCommonNames(),
+                ];
             }
             $client->bulk($params);
             $params = [];

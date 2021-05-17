@@ -41,6 +41,8 @@ class PlantIndexer
                     'synonyms' => $plant->getSynonyms(),
                     'common_names' => $plant->getCommonNames(),
             ];
+
+            return $params;
     }
 
     public function indexAllDocuments()
@@ -56,6 +58,7 @@ class PlantIndexer
         ];
         if($client->indices()->exists($deleteParams)){
             $response = $client->indices()->delete($deleteParams);
+            echo "Deleting index\n";
             print_r($response);
         }
 
@@ -69,8 +72,8 @@ class PlantIndexer
             ]
         ];
 
+        echo "Creating index\n";
         $response = $client->indices()->create($params);
-
         print_r($response);
 
         $total = $this->plantRepository->createQueryBuilder('a')
@@ -78,6 +81,8 @@ class PlantIndexer
             ->getQuery()
             ->getSingleScalarResult();
 
+
+        echo "Parsing documents... this may take a while\n";
         $offset = 0;
         $limit = 500;
         $stopper = $limit;

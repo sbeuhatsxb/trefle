@@ -37,6 +37,7 @@ services:
 
     Elastica\Client:
         $config:
+#            host: docker_es_1
             host: '%env(string:ES_URL)%'
             port: '%env(string:ES_PORT)%'
             username: '%env(string:ES_USER)%'

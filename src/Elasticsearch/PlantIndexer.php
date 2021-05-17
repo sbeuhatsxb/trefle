@@ -7,6 +7,7 @@ use Doctrine\ORM\EntityManagerInterface;
 use Elastica\Client;
 use Elastica\Document;
 use Elasticsearch\ClientBuilder;
+use Symfony\Component\Dotenv\Dotenv;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Component\Yaml\Yaml;
 
@@ -16,11 +17,11 @@ class PlantIndexer
     private $entityManager;
     private $client;
 
-    public function __construct( PlantRepository $plantRepository, EntityManagerInterface $entityManager)
+    public function __construct(ClientBuilder $client, PlantRepository $plantRepository, EntityManagerInterface $entityManager)
     {
         $this->plantRepository = $plantRepository;
         $this->entityManager = $entityManager;
-//        $this->client = $client;
+        $this->client = $client;
     }
 
     private function param(Plant $plant): array
@@ -41,19 +42,11 @@ class PlantIndexer
     {
         //docker exec -it symfony php -d memory_limit=4096M bin/console elastic:reindex --no-debug --env=prod
         $this->entityManager->getConnection()->getConfiguration()->setSQLLogger(null);
-        //        $allPlant = $this->plantRepository->findAll();
 
-        $settings = Yaml::parse(
-            file_get_contents(
-                __DIR__.'/../../config/elasticsearch/elasticserachconfig.yaml'
-            )
-        );
+        $host[] = getenv('SCALINGO_ELASTICSEARCH_URL');
+        $this->client->setHosts($host)->build();
 
-        dd($settings['host']);
-
-        $this->client->setHosts($settings['host'])->build();
-
-        dd($client);
+        dd($this->client);
 
         $total = $this->plantRepository->createQueryBuilder('a')
             ->select('count(a.id)')

@@ -29,9 +29,11 @@ services:
 
     # add more service definitions when explicit configuration is needed
     # please note that last definitions always *replace* previous ones
-    Elasticsearch\ClientBuilder: ~
+    Elasticsearch\ClientBuilder:
 #        host: '%env(string:ES_URL)%'
 #        port: '%env(string:ES_PORT)%'
 #        user: '%env(string:ES_USER)%'
 #        pass: '%env(string:ES_PW)%'
 #        scheme: 'http'
+        arguments:
+            - '%env(string:SCALINGO_ELASTICSEARCH_URL)%'

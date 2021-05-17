@@ -57,6 +57,7 @@ class PlantIndexer
             ->getSingleScalarResult();
 
 
+        $params = [];
         echo "Parsing documents... this may take a while\n";
         $offset = 0;
         $limit = 1000;

@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Elasticsearch;
 
 use App\Entity\Plant;
@@ -28,8 +29,8 @@ class PlantIndexer
     {
         return $params = [
             'index' => 'plantapi',
-            'id'    => $plant->getScientificName(),
-            'body'  =>  [
+            'id' => $plant->getScientificName(),
+            'body' => [
                 'scientific_name' => $plant->getScientificName(),
                 'common_name' => $plant->getCommonName(),
                 'synonyms' => $plant->getSynonyms(),
@@ -46,6 +47,39 @@ class PlantIndexer
         $host[] = getenv('SCALINGO_ELASTICSEARCH_URL');
         $client = $this->client->setHosts($host)->build();
 
+        $deleteParams = [
+            'index' => 'plantapi'
+        ];
+        $response = $client->indices()->delete($deleteParams);
+        print_r($response);
+
+        $params = [
+            'index' => 'my_index',
+            'body' => [
+                'settings' => [
+                    'number_of_shards' => 2,
+                    'number_of_replicas' => 0
+                ],
+                'mappings' => [
+                    'dynamic' => false,
+                    'properties' => [
+                        'scientific_name' => ['type' => 'text'],
+                        'common_name' =>
+                            [
+                                'type' => 'text',
+                                'analyzer' => 'english',
+                            ],
+                        'family_common_name' => ['type' => 'text'],
+                        'synonyms' => ['type' => 'text'],
+                        'common_names' => ['type' => 'text'],
+                    ],
+                ]
+            ]
+        ];
+
+        $response = $client->indices()->create($params);
+
+        print_r($response);
         $total = $this->plantRepository->createQueryBuilder('a')
             ->select('count(a.id)')
             ->getQuery()
@@ -61,8 +95,7 @@ class PlantIndexer
             $plants = $this->plantRepository->findByOffsetLimit($offset, $limit);
             foreach ($plants as $plant) {
                 $params = $this->param($plant);
-                $response = $client->index($params);
-                print_r($response);
+                $client->index($params);
             }
             $this->entityManager->clear();
             $offset += $limit;

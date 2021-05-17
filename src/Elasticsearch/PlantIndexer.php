@@ -84,7 +84,7 @@ class PlantIndexer
             }
             $plants = $this->plantRepository->findByOffsetLimit($offset, $limit);
             foreach ($plants as $plant) {
-                $params[] = $this->setDocument($plant);
+                $params['body'][] = $this->setDocument($plant);
             }
             $client->bulk($params);
             $params = [];

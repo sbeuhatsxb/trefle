@@ -67,28 +67,28 @@ class PlantIndexer
 
         $response = $client->indices()->create($params);
 
-        $params = [
-            'index' => 'plantapi',
-            'body' => [
-                'properties' => [
-                    'plant' => [
-                        'scientific_name' => ['type' => 'text'],
-                        'common_name' =>
-                            [
-                                'type' => 'text',
-                                'analyzer' => 'english',
-                            ],
-                        'family_common_name' => ['type' => 'text'],
-                        'synonyms' => ['type' => 'text'],
-                        'common_names' => ['type' => 'text'],
-                    ]
-                ]
-            ]
-        ];
-
-
-        $client->indices()->putMapping($params);
-
+//        $params = [
+//            'index' => 'plantapi',
+//            'body' => [
+//                'properties' => [
+//                    'plant' => [
+//                        'scientific_name' => ['type' => 'text'],
+//                        'common_name' =>
+//                            [
+//                                'type' => 'text',
+//                                'analyzer' => 'english',
+//                            ],
+//                        'family_common_name' => ['type' => 'text'],
+//                        'synonyms' => ['type' => 'text'],
+//                        'common_names' => ['type' => 'text'],
+//                    ]
+//                ]
+//            ]
+//        ];
+//
+//
+//        $client->indices()->putMapping($params);
+//
 
         print_r($response);
 

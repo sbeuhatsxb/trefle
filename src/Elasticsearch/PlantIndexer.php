@@ -50,8 +50,10 @@ class PlantIndexer
         $deleteParams = [
             'index' => 'plantapi'
         ];
-        $response = $client->indices()->delete($deleteParams);
-        print_r($response);
+        if($client->exists($deleteParams)){
+            $response = $client->indices()->delete($deleteParams);
+            print_r($response);
+        }
 
         $params = [
             'index' => 'my_index',

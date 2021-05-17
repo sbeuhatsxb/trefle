@@ -25,6 +25,7 @@ class IndexBuilder
         );
         // We build our index settings and mapping
         $index->create($settings, true);
+        
 
         return $index;
     }

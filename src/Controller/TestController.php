@@ -31,11 +31,11 @@ class TestController extends AbstractController
 
         $client->connect();
 
-        $path = '/_aliases?pretty';
+        $path = '_aliases?pretty';
 
         $response = $client->request($path, Request::METHOD_GET);
         $responseArray = $response->getData();
-        $response = new Response(json_encode($responseArray), 401);
+        $response = new Response(json_encode($responseArray), 200);
         $response->headers->set('Content-Type', 'application/json');
 
         return $response;

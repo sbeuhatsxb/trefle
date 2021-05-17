@@ -42,7 +42,7 @@ class ElasticReindexCommand extends Command
         $index = $this->indexBuilder->create();
 
 
-        $this->plantIndexer->indexAllDocuments($index->getName());
+        //$this->plantIndexer->indexAllDocuments($index->getName());
         $io->success('Index populated and ready!');
 
 

@@ -47,6 +47,9 @@ class TestCommand extends Command
         $responseArray = $response->getData();
         var_dump($responseArray);
 
+        var_dump($this->client->hasConnection());
+        var_dump($this->client->getConnection()->getAuthType());
+
 
         return Command::SUCCESS;
     }

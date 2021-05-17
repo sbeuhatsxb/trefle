@@ -66,21 +66,27 @@ class PlantIndexer
                 $limit = $total - $i;
             }
             $plants = $this->plantRepository->findByOffsetLimit($offset, $limit);
+
             foreach ($plants as $plant) {
                 $params['body'][] = [
                     'index' => [
                         '_index' => 'plantapi',
                         '_type' => 'plant',
                         '_id' => $plant->getId(),
-                    ]
-                ];
-                $params['body'][] = [
+                    ],
                     'scientific_name' => $plant->getScientificName(),
                     'common_name' => $plant->getCommonName(),
                     'synonyms' => $plant->getSynonyms(),
                     'common_names' => $plant->getCommonNames(),
                 ];
+//                $params['body'][] = [
+//                    'scientific_name' => $plant->getScientificName(),
+//                    'common_name' => $plant->getCommonName(),
+//                    'synonyms' => $plant->getSynonyms(),
+//                    'common_names' => $plant->getCommonNames(),
+//                ];
             }
+
             $client->bulk($params);
             $params = [];
             $this->entityManager->clear();

@@ -17,17 +17,16 @@ use Symfony\Component\HttpFoundation\Response;
 
 class SearchPlantController extends AbstractController
 {
-    private $client;
     /**
      * @Route("/api/v1/species/token={token}/q={slug}", methods={"GET"})
      * @param Request $request
-     * @param ClientBuilder $client
+     * @param ClientBuilder $cb
      * @return Response
      */
-    public function search(Request $request, EntityManagerInterface $entityManager, ClientBuilder $client, $slug, $token): Response
+    public function search(Request $request, EntityManagerInterface $entityManager, ClientBuilder $cb, $slug, $token): Response
     {
-        $host[] = $this->getParameter('es_host');
-        $client = $this->client->setHosts($host)->build();
+        $host = $this->getParameter('es_host');
+        $client = $cb->setHosts([$host["host"]])->build();
 
         $tokenRepo = $entityManager->getRepository(Token::class);
         $plantRepo = $entityManager->getRepository(Plant::class);

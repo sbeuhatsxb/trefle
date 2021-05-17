@@ -61,7 +61,6 @@ class PlantIndexer
                     'number_of_replicas' => 0
                 ],
                 'mappings' => [
-                    'dynamic' => false,
                     'properties' => [
                         'scientific_name' => ['type' => 'text'],
                         'common_name' =>
@@ -80,6 +79,7 @@ class PlantIndexer
         $response = $client->indices()->create($params);
 
         print_r($response);
+
         $total = $this->plantRepository->createQueryBuilder('a')
             ->select('count(a.id)')
             ->getQuery()

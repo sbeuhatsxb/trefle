@@ -32,7 +32,6 @@ class PlantIndexer
                     '_index' => 'plantapi',
                     '_type' => 'plant',
                     '_id' => $plant->getId(),
-                    'refresh' => true
                 ]
             ];
             $params['body'][] = [

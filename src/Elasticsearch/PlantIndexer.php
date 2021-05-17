@@ -6,51 +6,60 @@ use App\Repository\PlantRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Elastica\Client;
 use Elastica\Document;
+use Elasticsearch\ClientBuilder;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
+use Symfony\Component\Yaml\Yaml;
 
 class PlantIndexer
 {
-    private $client;
     private $plantRepository;
     private $entityManager;
+    private $client;
 
-    public function __construct(Client $client, PlantRepository $plantRepository, EntityManagerInterface $entityManager)
+    public function __construct( PlantRepository $plantRepository, EntityManagerInterface $entityManager)
     {
-        $this->client = $client;
         $this->plantRepository = $plantRepository;
         $this->entityManager = $entityManager;
+//        $this->client = $client;
     }
 
-    public function buildDocument(Plant $plant)
+    private function param(Plant $plant): array
     {
-        return new Document(
-            $plant->getId(), // Manually defined ID
-            [
+        return $params = [
+            'index' => 'plantapi',
+            'id'    => $plant->getScientificName(),
+            'body'  =>  [
                 'scientific_name' => $plant->getScientificName(),
                 'common_name' => $plant->getCommonName(),
                 'synonyms' => $plant->getSynonyms(),
                 'common_names' => $plant->getCommonNames(),
             ],
-            "plantapi" // Types are deprecated, to be removed in Elastic 7
-        );
+        ];
     }
 
-    public function indexAllDocuments($indexName)
+    public function indexAllDocuments()
     {
         //docker exec -it symfony php -d memory_limit=4096M bin/console elastic:reindex --no-debug --env=prod
         $this->entityManager->getConnection()->getConfiguration()->setSQLLogger(null);
         //        $allPlant = $this->plantRepository->findAll();
-        
-        $index = $this->client->getIndex($indexName);
+
+        $settings = Yaml::parse(
+            file_get_contents(
+                __DIR__.'/../../config/elasticsearch/elasticserachconfig.yaml'
+            )
+        );
+
+        dd($settings['host']);
+
+        $this->client->setHosts($settings['host'])->build();
+
+        dd($client);
 
         $total = $this->plantRepository->createQueryBuilder('a')
             ->select('count(a.id)')
             ->getQuery()
             ->getSingleScalarResult();
 
-        //        $index = $this->client->getIndex($indexName);
-
-        $documents = [];
         $offset = 0;
         $limit = 500;
         $stopper = $limit;
@@ -60,11 +69,10 @@ class PlantIndexer
             }
             $plants = $this->plantRepository->findByOffsetLimit($offset, $limit);
             foreach ($plants as $plant) {
-                $documents[] = $this->buildDocument($plant);
+                $params = $this->param($plant);
+                $response = $client->index($params);
+                print_r($response);
             }
-            $index->addDocuments($documents);
-            $index->refresh();
-            $documents = [];
             $this->entityManager->clear();
             $offset += $limit;
         }

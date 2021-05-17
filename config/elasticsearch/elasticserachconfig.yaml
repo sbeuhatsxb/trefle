@@ -1,0 +1,2 @@
+host:
+  '%env(string:SCALINGO_ELASTICSEARCH_URL)%'

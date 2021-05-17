@@ -27,21 +27,19 @@ class PlantIndexer
 
     private function setDocument(Plant $plant): array
     {
-            $params['body'][] = [
+            return $params = [
                 'index' => [
                     '_index' => 'plantapi',
                     '_type' => 'plant',
                     '_id' => $plant->getId(),
+                    'body' => [
+                        'scientific_name' => $plant->getScientificName(),
+                        'common_name' => $plant->getCommonName(),
+                        'synonyms' => $plant->getSynonyms(),
+                        'common_names' => $plant->getCommonNames(),
+                    ]
                 ]
             ];
-            $params['body'][] = [
-                    'scientific_name' => $plant->getScientificName(),
-                    'common_name' => $plant->getCommonName(),
-                    'synonyms' => $plant->getSynonyms(),
-                    'common_names' => $plant->getCommonNames(),
-            ];
-
-            return $params;
     }
 
     public function indexAllDocuments()
@@ -86,15 +84,15 @@ class PlantIndexer
         $limit = 1000;
         $stopper = $limit;
         for ($i = 0; $i < $total; $i += $stopper) {
-            $params = [];
             if ($i + $limit > $total) {
                 $limit = $total - $i;
             }
             $plants = $this->plantRepository->findByOffsetLimit($offset, $limit);
             foreach ($plants as $plant) {
-                $params = $this->setDocument($plant);
+                $params[] = $this->setDocument($plant);
             }
             $client->bulk($params);
+            $params = [];
             $this->entityManager->clear();
             $offset += $limit;
         }

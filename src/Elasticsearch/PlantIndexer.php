@@ -5,12 +5,7 @@ namespace App\Elasticsearch;
 use App\Entity\Plant;
 use App\Repository\PlantRepository;
 use Doctrine\ORM\EntityManagerInterface;
-use Elastica\Client;
-use Elastica\Document;
 use Elasticsearch\ClientBuilder;
-use Symfony\Component\Dotenv\Dotenv;
-use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
-use Symfony\Component\Yaml\Yaml;
 
 class PlantIndexer
 {

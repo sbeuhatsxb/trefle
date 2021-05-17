@@ -3,7 +3,6 @@
 namespace App\Command;
 
 use App\Elasticsearch\PlantIndexer;
-use App\Elasticsearch\IndexBuilder;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
@@ -15,12 +14,10 @@ class ElasticReindexCommand extends Command
 {
     protected static $defaultName = 'elastic:reindex';
     protected static $defaultDescription = 'Add a short description for your command';
-    private $indexBuilder;
     private $plantIndexer;
 
-    public function __construct(IndexBuilder $indexBuilder, PlantIndexer $plantIndexer)
+    public function __construct(PlantIndexer $plantIndexer)
     {
-        $this->indexBuilder = $indexBuilder;
         $this->plantIndexer = $plantIndexer;
 
         parent::__construct();

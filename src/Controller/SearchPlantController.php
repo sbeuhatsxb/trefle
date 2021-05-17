@@ -7,7 +7,7 @@ use App\Entity\Plant;
 use App\Entity\Token;
 use App\Repository\TokenRepository;
 use Doctrine\ORM\EntityManagerInterface;
-use Elasticsearch\ClientBuilder;
+use Elasticsearch\Client;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Routing\Annotation\Route;
@@ -19,10 +19,10 @@ class SearchPlantController extends AbstractController
     /**
      * @Route("/api/v1/species/token={token}/q={slug}", methods={"GET"})
      * @param Request $request
-     * @param ClientBuilder $client
+     * @param Client $client
      * @return Response
      */
-    public function search(Request $request, EntityManagerInterface $entityManager, ClientBuilder $client, $slug, $token): Response
+    public function search(Request $request, EntityManagerInterface $entityManager, Client $client, $slug, $token): Response
     {
         $tokenRepo = $entityManager->getRepository(Token::class);
         $plantRepo = $entityManager->getRepository(Plant::class);

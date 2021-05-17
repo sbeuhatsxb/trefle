@@ -48,7 +48,9 @@ class TestCommand extends Command
         var_dump($responseArray);
 
         var_dump($this->client->hasConnection());
-        var_dump($this->client->getConnection()->getAuthType());
+        var_dump($this->client->getConnection()->getHost());
+        var_dump($this->client->getConnection()->getUsername());
+        var_dump($this->client->getConnection()->getPort());
 
 
         return Command::SUCCESS;

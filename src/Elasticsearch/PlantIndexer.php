@@ -25,18 +25,22 @@ class PlantIndexer
         $this->client = $client;
     }
 
-    private function param(Plant $plant): array
+    private function setDocument(Plant $plant): array
     {
-        return $params = [
-            'index' => 'plantapi',
-            'id' => $plant->getScientificName(),
-            'body' => [
-                'scientific_name' => $plant->getScientificName(),
-                'common_name' => $plant->getCommonName(),
-                'synonyms' => $plant->getSynonyms(),
-                'common_names' => $plant->getCommonNames(),
-            ],
-        ];
+            $params['body'][] = [
+                'index' => [
+                    '_index' => 'plantapi',
+                    '_type' => 'plant',
+                    '_id' => $plant->getId(),
+                    'refresh' => true
+                ]
+            ];
+            $params['body'][] = [
+                    'scientific_name' => $plant->getScientificName(),
+                    'common_name' => $plant->getCommonName(),
+                    'synonyms' => $plant->getSynonyms(),
+                    'common_names' => $plant->getCommonNames(),
+            ];
     }
 
     public function indexAllDocuments()
@@ -67,29 +71,6 @@ class PlantIndexer
 
         $response = $client->indices()->create($params);
 
-//        $params = [
-//            'index' => 'plantapi',
-//            'body' => [
-//                'properties' => [
-//                    'plant' => [
-//                        'scientific_name' => ['type' => 'text'],
-//                        'common_name' =>
-//                            [
-//                                'type' => 'text',
-//                                'analyzer' => 'english',
-//                            ],
-//                        'family_common_name' => ['type' => 'text'],
-//                        'synonyms' => ['type' => 'text'],
-//                        'common_names' => ['type' => 'text'],
-//                    ]
-//                ]
-//            ]
-//        ];
-//
-//
-//        $client->indices()->putMapping($params);
-//
-
         print_r($response);
 
         $total = $this->plantRepository->createQueryBuilder('a')
@@ -101,14 +82,17 @@ class PlantIndexer
         $limit = 500;
         $stopper = $limit;
         for ($i = 0; $i < $total; $i += $stopper) {
+            $params = [];
             if ($i + $limit > $total) {
                 $limit = $total - $i;
             }
             $plants = $this->plantRepository->findByOffsetLimit($offset, $limit);
             foreach ($plants as $plant) {
-                $params = $this->param($plant);
-                $client->index($params);
+                $params = $this->setDocument($plant);
+                $params['refresh'] = true;
+//                $client->index($params);
             }
+            $client->bulk($params);
             $this->entityManager->clear();
             $offset += $limit;
         }

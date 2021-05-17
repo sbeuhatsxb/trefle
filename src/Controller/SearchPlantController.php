@@ -37,12 +37,22 @@ class SearchPlantController extends AbstractController
             $params = [
                 'index' => 'my_index',
                 'body'  => [
-                    'query' => [
-                        'match' => [
-                            'scientific_name' => $slug,
-                            'common_name' => $slug,
-                            'common_names' => $slug,
-                            'synonyms' => $slug,
+                    "query" => [
+                        "bool" => [
+                            "must" => [
+                                'match' => [
+                                    'scientific_name' => $slug,
+                                ],
+                                'match' => [
+                                    'common_name' => $slug,
+                                ],
+                                'match' => [
+                                    'common_names' => $slug,
+                                ],
+                                'match' => [
+                                    'synonyms' => $slug,
+                                ],
+                            ]
                         ]
                     ]
                 ]

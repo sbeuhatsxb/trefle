@@ -44,9 +44,7 @@ class PlantIndexer
         $this->entityManager->getConnection()->getConfiguration()->setSQLLogger(null);
 
         $host[] = getenv('SCALINGO_ELASTICSEARCH_URL');
-        $this->client->setHosts($host)->build();
-
-        dd($this->client);
+        $client = $this->client->setHosts($host)->build();
 
         $total = $this->plantRepository->createQueryBuilder('a')
             ->select('count(a.id)')

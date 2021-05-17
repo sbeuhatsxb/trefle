@@ -36,26 +36,24 @@ class SearchPlantController extends AbstractController
 
             $params = [
                 'index' => 'plantapi',
+                'type' => 'plant',
                 'body'  => [
-                    "query" => [
-                        "bool" => [
-                            "must" => [
-                                'match' => [
-                                    'scientific_name' => $slug,
-                                ],
-                                'match' => [
-                                    'common_name' => $slug,
-                                ],
-                                'match' => [
-                                    'common_names' => $slug,
-                                ],
-                                'match' => [
-                                    'synonyms' => $slug,
-                                ],
-                            ]
-                        ]
-                    ]
+//                    'match' => [
+//                            'scientific_name' => $slug,
+//                        ],
+//                    'match' => [
+//                        'common_name' => $slug,
+//                    ],
+                    'match' => [
+                        'common_names' => $slug,
+                    ],
+//                    'match' => [
+//                        'synonyms' => $slug,
+//                    ],
+//                ]
                 ]
+
+
             ];
 
             $foundPlants = $client->search($params);

@@ -4,6 +4,7 @@
 # Put parameters here that don't need to change on each machine where the app is deployed
 # https://symfony.com/doc/current/best_practices/configuration.html#application-related-configuration
 parameters:
+    es_host: '%env(string:SCALINGO_ELASTICSEARCH_URL)%'
 #    es_config: {'hosts': ['http://es:9200']}
 services:
     # default configuration for services in *this* file

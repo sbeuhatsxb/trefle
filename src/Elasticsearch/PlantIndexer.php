@@ -56,14 +56,22 @@ class PlantIndexer
         }
 
         $params = [
-            'index' => 'my_index',
+            'index' => 'plantapi',
             'body' => [
                 'settings' => [
-                    'number_of_shards' => 2,
+                    'number_of_shards' => 1,
                     'number_of_replicas' => 0
-                ],
-                'mappings' => [
-                    'properties' => [
+                ]
+            ]
+        ];
+
+        $response = $client->indices()->create($params);
+
+        $params = [
+            'index' => 'plantapi',
+            'body' => [
+                'properties' => [
+                    'plant' => [
                         'scientific_name' => ['type' => 'text'],
                         'common_name' =>
                             [
@@ -73,12 +81,14 @@ class PlantIndexer
                         'family_common_name' => ['type' => 'text'],
                         'synonyms' => ['type' => 'text'],
                         'common_names' => ['type' => 'text'],
-                    ],
+                    ]
                 ]
             ]
         ];
 
-        $response = $client->indices()->create($params);
+
+        $client->indices()->putMapping($params);
+
 
         print_r($response);
 

@@ -31,14 +31,7 @@ class SearchPlantController extends AbstractController
         if($token != null){
 
             $params = [
-                'index' => 'plantapi'
-            ];
-
-            $response = $client->get($params);
-            dd($response);
-
-            $params = [
-                'index' => 'plantapi',
+                'index' => 'my_index',
                 'body'  => [
                     'query' => [
                         'match' => [
@@ -51,10 +44,8 @@ class SearchPlantController extends AbstractController
                 ]
             ];
 
-            $response = $client->search($params);
-            print_r($response);
-
-            $foundPlants = $client->getIndex('plantapi')->search($slug);
+            $foundPlants = $client->search($params);
+            dd($foundPlants);
 
             $results = [];
 

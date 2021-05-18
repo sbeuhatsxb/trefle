@@ -36,7 +36,8 @@ class SearchPlantController extends AbstractController
 
             $params = [
                 'index' => 'plantapi',
-                'query'  => [
+                'body'  => [
+                    ['query' => [
 //                    'match' => [
 //                            'scientific_name' => $slug,
 //                        ],
@@ -50,8 +51,9 @@ class SearchPlantController extends AbstractController
 //                        'synonyms' => $slug,
 //                    ],
 //                ]
+                        ]
+                    ]
                 ]
-
 
             ];
 

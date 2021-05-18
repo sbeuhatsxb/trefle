@@ -34,28 +34,39 @@ class SearchPlantController extends AbstractController
         $token = $tokenRepo->findOneBy(['token' => $token]);
         if($token != null){
 
+            $common_name = '{
+                "query" : {
+                    "match" : {
+                        "common_names" : '.$slug.'
+                    }
+                }
+            }';
+
             $params = [
                 'index' => 'plantapi',
-                'body'  => [
-                    ['query' => [
-//                    'match' => [
-//                            'scientific_name' => $slug,
-//                        ],
-//                    'match' => [
-//                        'common_name' => $slug,
-//                    ],
-                    'match' => [
-                        'common_names' => $slug,
-                    ],
-//                    'match' => [
-//                        'synonyms' => $slug,
-//                    ],
-//                ]
-                        ]
-                    ]
-                ]
-
+                'type' => 'plant',
+                'body'  => $common_name
             ];
+
+            //                [
+//                    ['query' => [
+////                    'match' => [
+////                            'scientific_name' => $slug,
+////                        ],
+////                    'match' => [
+////                        'common_name' => $slug,
+////                    ],
+//                    'match' => [
+//                        'common_names' => $slug,
+//                    ],
+////                    'match' => [
+////                        'synonyms' => $slug,
+////                    ],
+////                ]
+//                        ]
+//                    ]
+//                ]
+
 
             $foundPlants = $client->search($params);
             dd($foundPlants);

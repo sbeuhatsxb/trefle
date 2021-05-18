@@ -5,9 +5,7 @@ namespace App\Controller;
 
 use App\Entity\Plant;
 use App\Entity\Token;
-use App\Repository\TokenRepository;
 use Doctrine\ORM\EntityManagerInterface;
-use Elasticsearch\Client;
 use Elasticsearch\ClientBuilder;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;

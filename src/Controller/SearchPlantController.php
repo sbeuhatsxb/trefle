@@ -33,43 +33,15 @@ class SearchPlantController extends AbstractController
 
         $token = $tokenRepo->findOneBy(['token' => $token]);
         if($token != null){
+            
 
-            $common_name = '{
-                "query" : {
-                    "match" : {
-                        "common_names" : "'.$slug.'"
-                    }
-                }
-            }';
-
-            $params = [
-                'index' => 'plantapi',
-                'type' => 'plant',
-                'body'  => $common_name
-            ];
-
-            //                [
-//                    ['query' => [
-////                    'match' => [
-////                            'scientific_name' => $slug,
-////                        ],
-////                    'match' => [
-////                        'common_name' => $slug,
-////                    ],
-//                    'match' => [
-//                        'common_names' => $slug,
-//                    ],
-////                    'match' => [
-////                        'synonyms' => $slug,
-////                    ],
-////                ]
-//                        ]
-//                    ]
-//                ]
+            $scientific_name = $client->search($this->getParams($slug, 'scientific_name'));
+            $common_name = $client->search($this->getParams($slug, 'common_name'));
+            $common_names = $client->search($this->getParams($slug, 'common_names'));
+            $synonyms = $client->search($this->getParams($slug,'synonyms'));
 
 
-            $foundPlants = $client->search($params);
-            dd($foundPlants);
+            dd($scientific_name, $common_name, $common_names, $synonyms);
 
             $results = [];
 
@@ -100,6 +72,22 @@ class SearchPlantController extends AbstractController
             return $response;
         }
 
+    }
+    
+    private function getParams($slug, $field){
+        $query = '{
+                "query" : {
+                    "match" : {
+                        "'.$field.'" : "'.$slug.'"
+                    }
+                }
+            }';
+
+        return $params = [
+            'index' => 'plantapi',
+            'type' => 'plant',
+            'body'  => $query
+        ];
     }
 
 }

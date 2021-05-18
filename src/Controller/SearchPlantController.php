@@ -42,28 +42,38 @@ class SearchPlantController extends AbstractController
 
             $resultsIds = [];
 
+            $result = false;
             if($common_names["hits"]["total"] != 0){
+                $result = true;
                 foreach($common_names["hits"]["hits"] as $hit){
                     $resultsIds[] = $hit["_id"];
                 }
             }
             if($common_name["hits"]["total"] != 0){
+                $result = true;
                 foreach($common_name["hits"]["hits"] as $hit){
                     $resultsIds[] = $hit["_id"];
                 }
             }
             if($scientific_name["hits"]["total"] != 0){
+                $result = true;
                 foreach($scientific_name["hits"]["hits"] as $hit){
                     $resultsIds[] = $hit["_id"];
                 }
             }
             if($synonyms["hits"]["total"] != 0){
+                $result = true;
                 foreach($synonyms["hits"]["hits"] as $hit){
                     $resultsIds[] = $hit["_id"];
                 }
             }
 
-
+            if(!$result){
+                $array = array('plants' => []);
+                $response = new Response(json_encode($array), 200);
+                $response->headers->set('Content-Type', 'application/json');
+                return $response;
+            }
 
             foreach ($resultsIds as $id) {
                 /** @var Plant $plant */
@@ -82,7 +92,12 @@ class SearchPlantController extends AbstractController
                     ];
             }
 
-            return $this->json(['plants' => $jsonResponse]);
+            $array = ['plants' => $jsonResponse];
+            $response = new Response(json_encode($array), 200);
+            $response->headers->set('Content-Type', 'application/json');
+
+            return $response;
+
         } else {
             $array = array('401' => 'Valid token requested');
             $response = new Response(json_encode($array), 401);

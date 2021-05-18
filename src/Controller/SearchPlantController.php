@@ -33,37 +33,56 @@ class SearchPlantController extends AbstractController
 
         $token = $tokenRepo->findOneBy(['token' => $token]);
         if($token != null){
-            
 
-            $scientific_name = $client->search($this->getParams($slug, 'scientific_name'));
-            $common_name = $client->search($this->getParams($slug, 'common_name'));
+
             $common_names = $client->search($this->getParams($slug, 'common_names'));
+            $common_name = $client->search($this->getParams($slug, 'common_name'));
             $synonyms = $client->search($this->getParams($slug,'synonyms'));
+            $scientific_name = $client->search($this->getParams($slug, 'scientific_name'));
+
+            $resultsIds = [];
+
+            if($common_names["hits"]["total"] != 0){
+                foreach($common_names["hits"]["hits"] as $hit){
+                    $resultsIds[] = $hit["_id"];
+                }
+            }
+            if($common_name["hits"]["total"] != 0){
+                foreach($common_name["hits"]["hits"] as $hit){
+                    $resultsIds[] = $hit["_id"];
+                }
+            }
+            if($scientific_name["hits"]["total"] != 0){
+                foreach($scientific_name["hits"]["hits"] as $hit){
+                    $resultsIds[] = $hit["_id"];
+                }
+            }
+            if($synonyms["hits"]["total"] != 0){
+                foreach($synonyms["hits"]["hits"] as $hit){
+                    $resultsIds[] = $hit["_id"];
+                }
+            }
 
 
-            dd($scientific_name, $common_name, $common_names, $synonyms);
 
-            $results = [];
-
-            foreach ($foundPlants->getResults() as $result) {
+            foreach ($resultsIds as $id) {
                 /** @var Plant $plant */
-                $plant = $plantRepo->find($result->getId());
-                $results[] = [
-                            'score' => $result->getScore(),
-                            'id' => htmlspecialchars($result->getId(), ENT_COMPAT | ENT_HTML5),
-                            'scientific_name' => htmlspecialchars($result->getData()["scientific_name"], ENT_COMPAT | ENT_HTML5),
+                $plant = $plantRepo->find($id);
+                $resultsIds[] = [
+                            'id' => htmlspecialchars($plant->getId(), ENT_COMPAT | ENT_HTML5),
+                            'scientific_name' => htmlspecialchars($plant->getScientificName(), ENT_COMPAT | ENT_HTML5),
                             'family_common_name' => htmlspecialchars($plant->getFamilyCommonName(), ENT_COMPAT | ENT_HTML5),
-                            'common_name' => htmlspecialchars($result->getData()["common_name"], ENT_COMPAT | ENT_HTML5),
+                            'common_name' => htmlspecialchars($plant->getCommonName(), ENT_COMPAT | ENT_HTML5),
                             'genus' => htmlspecialchars($plant->getGenus()->getName(), ENT_COMPAT | ENT_HTML5),
                             'family' => htmlspecialchars($plant->getFamily()->getName(), ENT_COMPAT | ENT_HTML5),
-                            'common_names' => htmlspecialchars($result->getData()["common_names"], ENT_COMPAT | ENT_HTML5),
+                            'common_names' => htmlspecialchars($plant->getCommonNames(), ENT_COMPAT | ENT_HTML5),
                             'vegetable' => htmlspecialchars($plant->getVegetable(), ENT_COMPAT | ENT_HTML5),
                             'edible' => htmlspecialchars($plant->getEdible(), ENT_COMPAT | ENT_HTML5),
                             'image_url' => htmlspecialchars($plant->getImageUrl(), ENT_COMPAT | ENT_HTML5),
                     ];
             }
 
-            return $this->json(['plants' => $results]);
+            return $this->json(['plants' => $resultsIds]);
         } else {
             $array = array('401' => 'Valid token requested');
             $response = new Response(json_encode($array), 401);

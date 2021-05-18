@@ -37,7 +37,7 @@ class SearchPlantController extends AbstractController
             $common_name = '{
                 "query" : {
                     "match" : {
-                        "common_names" : '.$slug.'
+                        "common_names" : "'.$slug.'"
                     }
                 }
             }';

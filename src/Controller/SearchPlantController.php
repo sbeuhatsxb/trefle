@@ -68,7 +68,7 @@ class SearchPlantController extends AbstractController
             foreach ($resultsIds as $id) {
                 /** @var Plant $plant */
                 $plant = $plantRepo->find($id);
-                $resultsIds[] = [
+                $jsonResponse[] = [
                             'id' => htmlspecialchars($plant->getId(), ENT_COMPAT | ENT_HTML5),
                             'scientific_name' => htmlspecialchars($plant->getScientificName(), ENT_COMPAT | ENT_HTML5),
                             'family_common_name' => htmlspecialchars($plant->getFamilyCommonName(), ENT_COMPAT | ENT_HTML5),
@@ -82,7 +82,7 @@ class SearchPlantController extends AbstractController
                     ];
             }
 
-            return $this->json(['plants' => $resultsIds]);
+            return $this->json(['plants' => $jsonResponse]);
         } else {
             $array = array('401' => 'Valid token requested');
             $response = new Response(json_encode($array), 401);

@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <title>{% block title %}Chlorophilia{% endblock %}</title>
+        {% block stylesheets %}{% endblock %}
+
+        {% block javascripts %}{% endblock %}
+    </head>
+    <body>
+        {% block body %}
+            <h1>Chlorophilia App 1.0.1</h1>
+            <p>Chlorophila is an API consumer phone application dedicated to know if a given plant receives enough light.</p>
+            <p>This application also provides environmental requirements information and descriptions for more than 450.000 plants.</p>
+            <h2>Privacy policy</h2>
+            <p>Chlorophilia is an open source free-to-use software and does not record any data at all from the user.</p>
+            <h2>Advertising</h2>
+            <p>There are no ads at all.</p>
+            <p>If you'd like to participate to the Chlorophilia's development, feel free to give a monthly tip to the <a href="https://fr.tipeee.com/chlorophilia">dedicated Tipee page</a>.</p>
+            <h2>Family policy</h2>
+            <p>Chlorophilia is an educational service and therefore does not contains any sensitive information of any nature.</p>
+            <p>It contains only plants pictures and descriptions</p>
+            <p>Uneducated children should never be left alone with a plant, especially if it is a toxic one.</p>
+            <p>For further information about the edibility of a plant, please refer to the Edibility section provided further below.</p>
+            <h2>Chlorophilia API</h2>
+            <p>Chlorophilia API does not provide any any sensible information of any kind, only plant's pictures and plant's descriptions.</p>
+            <p>Chlorophilia API does not allow the users to send any data to the database.</p>
+            <h2>Edibility</h2>
+            <p>DO NOT EAT ANY PLANT BEFORE REFERING TO YOUR PHARMACIST.</p>
+            <p>Chlorophilia API edibility description is here to provide a consensual scientific acknowledgement whether a plant part can be eaten or not.</p>
+            <p>If a plant part is considered to be edible, you should always refer to your pharmacist before eating it and double check if any doubt remains.</p>
+            <p>Nonetheless should you have eaten a plant and feel weird or sick, contact immediately your nearest <a href="https://www.aapcc.org/">Poison Control Center</a>.</p>
+            <h2>Contacts</h2>
+            <p>Would you require more information feel free to contact <a href="mailto:chlorophilia.app@gmail.com">chlorophilia.app@gmail.com</a></p>
+        {% endblock %}
+    </body>
+</html>
